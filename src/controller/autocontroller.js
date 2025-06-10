@@ -32,6 +32,11 @@ exports.login = (req, res) => {
 };
 
 exports.getregisterpage=(req,res)=>{
-  console.log("hello world");
   res.render("register.ejs");
+};
+exports.gethomepage=(req,res)=>{
+  res.render("homepage.ejs");
+};
+exports.getloginpage=(req,res)=>{
+  res.render("login.ejs");
 };
