@@ -12,6 +12,7 @@ exports.register = async (req, res) => {
     userModel.createUser(name, email, hashedPassword, role, (err) => {
       if (err) return res.status(500).json({ message: 'Registration failed' });
       res.status(201).json({ message: 'User registered successfully' });
+      
     });
   });
 };
@@ -39,4 +40,7 @@ exports.gethomepage=(req,res)=>{
 };
 exports.getloginpage=(req,res)=>{
   res.render("login.ejs");
+};
+exports.getaboutpage=(req,res)=>{
+  res.render("about.ejs");
 };
