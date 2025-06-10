@@ -1,7 +1,15 @@
 const express = require('express');
 const router = express.Router();
-const { login } = require('../controller/autocontroller');
+const authController = require('../controller/autocontroller');
+const app=require("../app");
 
-router.post('/login', login);
+
+router.get('/register', authController.getregisterpage);
+
+router.post('/register', authController.register);
+router.post('/login', authController.login);
+router.get('/', (req, res)=>{
+    res.send("welcome to my page");
+});
 
 module.exports = router;
