@@ -86,7 +86,7 @@ const insertReception = (user_id, reception_name, contact) => {
 
 exports.login = (req, res) => {
   const { email, password } = req.body;
-  res.render('sidebar.ejs');
+  res.render('dashboard.ejs');
   userModel.findUserByEmail(email, async (err, results) => {
     if (err || results.length === 0) return res.status(401).json({ message: 'Invalid credentials' });
 
