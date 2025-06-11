@@ -1,61 +1,78 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Hospital Management System</title>
-  <!-- Bootstrap CSS -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
-</head>
-<body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hospital Management System</title>
+    <!-- Bootstrap CSS -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        /* Removed position: fixed to allow scrolling */
+        font-family: Arial, sans-serif;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Navbar -->
+    <%- include('header.ejs') %>
 
-  <!-- Navbar -->
-  <%- include('header.ejs')%>
+    <!-- Hero Section -->
+    <section class="py-5 text-center bg-light">
+      <div class="container">
+        <h1 class="display-5 fw-bold">Welcome to Hospital Management System</h1>
+        <p class="lead">
+          Efficiently manage patients, doctors, appointments, and more using our
+          user-friendly system.
+        </p>
+        <a href="/register" class="btn btn-primary btn-lg mt-3">Get Started</a>
+      </div>
+    </section>
 
-  <!-- Hero Section -->
-  <section class="py-5 text-center bg-light">
-    <div class="container">
-      <h1 class="display-5 fw-bold">Welcome to Hospital Management System</h1>
-      <p class="lead">Efficiently manage patients, doctors, appointments, and more using our user-friendly system.</p>
-      <a href="/register" class="btn btn-primary btn-lg mt-3">Get Started</a>
-    </div>
-  </section>
-
-  <!-- Features Section -->
-  <section class="py-5">
-    <div class="container">
-      <h2 class="text-center mb-5">Core Features</h2>
-      <div class="row text-center g-4">
-        <div class="col-md-4">
-          <div class="card p-4 shadow-sm">
-            <h4>Patient Management</h4>
-            <p class="text-muted">Register, update, and track patient records seamlessly.</p>
+    <!-- Features Section -->
+    <section class="py-5">
+      <div class="container">
+        <h2 class="text-center mb-5">Core Features</h2>
+        <div class="row text-center g-4">
+          <div class="col-md-4">
+            <div class="card p-4 shadow-sm h-100">
+              <h4>Patient Management</h4>
+              <p class="text-muted">
+                Register, update, and track patient records seamlessly.
+              </p>
+            </div>
           </div>
-        </div>
-        <div class="col-md-4">
-          <div class="card p-4 shadow-sm">
-            <h4>Doctor Panel</h4>
-            <p class="text-muted">Assign doctors, view schedules, and manage availability.</p>
+          <div class="col-md-4">
+            <div class="card p-4 shadow-sm h-100">
+              <h4>Doctor Panel</h4>
+              <p class="text-muted">
+                Assign doctors, view schedules, and manage availability.
+              </p>
+            </div>
           </div>
-        </div>
-        <div class="col-md-4">
-          <div class="card p-4 shadow-sm">
-            <h4>Appointment Booking</h4>
-            <p class="text-muted">Schedule and manage patient appointments quickly.</p>
+          <div class="col-md-4">
+            <div class="card p-4 shadow-sm h-100">
+              <h4>Appointment Booking</h4>
+              <p class="text-muted">
+                Schedule and manage patient appointments quickly.
+              </p>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- Footer -->
-  <footer class="bg-primary text-white text-center py-3 mt-5">
-    <div class="container">
-      <p class="mb-0">&copy; 2025 HospitalSys. All rights reserved.</p>
-    </div>
-  </footer>
+    <!-- Footer -->
+    <footer class="bg-primary text-white text-center py-3 mt-5">
+      <div class="container">
+        <p class="mb-0">&copy; 2025 HospitalSys. All rights reserved.</p>
+      </div>
+    </footer>
 
-  <!-- Bootstrap JS -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-</body>
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
 </html>
