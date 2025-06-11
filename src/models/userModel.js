@@ -1,9 +1,15 @@
 const db = require('../config/db');
 
-exports.createUser = (name, email, hashedPassword, role, callback) => {
-  const sql = 'INSERT INTO users (name, email, password, role) VALUES (?, ?, ?, ?)';
-  db.query(sql, [name, email, hashedPassword, role], callback);
+exports.createUser = (name, email, hashedPassword, role) => {
+  return new Promise((resolve, reject) => {
+    const sql = "INSERT INTO users (name, username, password, role) VALUES (?, ?, ?, ?)";
+    db.query(sql, [name, email, hashedPassword, role], (err, result) => {
+      if (err) reject(err);
+      else resolve(result); // result.insertId will be used
+    });
+  });
 };
+
 
 exports.findUserByEmail = (email, callback) => {
   const sql = 'SELECT * FROM users WHERE email = ?';

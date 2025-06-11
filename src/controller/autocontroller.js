@@ -1,21 +1,79 @@
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
-const userModel = require('../models/userModel');
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
+const userModel = require("../models/userModel");
+const db = require("../config/db");
 
 exports.register = async (req, res) => {
-  const { name, email, password, role } = req.body;
+  try {
+    const { name, email, password, role } = req.body;
 
-  userModel.findUserByEmail(email, async (err, results) => {
-    if (results.length > 0) return res.status(400).json({ message: 'Email already exists' });
+    // Check if email exists
+    const userExists = await userModel.findUserByEmail(email);
+    if (userExists.length > 0) {
+      return res.status(400).send("Email already registered");
+    }
 
+    // Hash password
     const hashedPassword = await bcrypt.hash(password, 10);
-    userModel.createUser(name, email, hashedPassword, role, (err) => {
-      if (err) return res.status(500).json({ message: 'Registration failed' });
-      res.status(201).json({ message: 'User registered successfully' });
-      
+
+    // Create user
+    const userResult = await userModel.createUser(name, email, hashedPassword, role);
+    const user_id = userResult.insertId;
+
+    // Role-specific insertion
+    if (role === "admin") {
+      const { admin_contact } = req.body;
+      await insertAdmin(user_id, admin_contact);
+    } else if (role === "doctor") {
+      const { doctor_specialization, doctor_contact, doctor_experience } = req.body;
+      await insertDoctor(user_id, doctor_specialization, doctor_contact, doctor_experience);
+    } else if (role === "reception") {
+      const { reception_contact } = req.body;
+      await insertReception(user_id, reception_contact);
+    }
+
+    res.status(201).send("User registered successfully");
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Server error");
+  }
+};
+
+// Insert into admin table
+const insertAdmin = (user_id, admin_contact) => {
+  return new Promise((resolve, reject) => {
+    const sql = "INSERT INTO admin (admin_contact, user_id) VALUES (?, ?)";
+    db.query(sql, [admin_contact, user_id], (err, result) => {
+      if (err) reject(err);
+      else resolve(result);
     });
   });
 };
+
+// Insert into doctor table
+const insertDoctor = (user_id, specialization, contact, experience) => {
+  return new Promise((resolve, reject) => {
+    const sql = `INSERT INTO doctor 
+      (doctor_name, doctor_specialization, doctor_contact, doctor_experience, status, user_id)
+      VALUES (?, ?, ?, ?, 'active', ?)`;
+    db.query(sql, ["", specialization, contact, experience, user_id], (err, result) => {
+      if (err) reject(err);
+      else resolve(result);
+    });
+  });
+};
+
+// Insert into reception table
+const insertReception = (user_id, contact) => {
+  return new Promise((resolve, reject) => {
+    const sql = "INSERT INTO reception (reception_name, reception_contact, status, user_id) VALUES (?, ?, 'active', ?)";
+    db.query(sql, ["", contact, user_id], (err, result) => {
+      if (err) reject(err);
+      else resolve(result);
+    });
+  });
+};
+
 
 exports.login = (req, res) => {
   const { email, password } = req.body;
