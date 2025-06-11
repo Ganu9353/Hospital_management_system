@@ -18,5 +18,14 @@
   },
   "author": "",
   "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Ganu9353/Hospital_management_system.git"
+  },
+  "keywords": [],
+  "bugs": {
+    "url": "https://github.com/Ganu9353/Hospital_management_system/issues"
+  },
+  "homepage": "https://github.com/Ganu9353/Hospital_management_system#readme",
   "description": ""
 }
