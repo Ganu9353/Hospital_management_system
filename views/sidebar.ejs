@@ -1,21 +1,99 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Hospital Management System</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
-    <style>
-      body {
-        font-family: Arial, sans-serif;
-      }
-    </style>
-  </head>
-  <body>
+<head>
+  <meta charset="UTF-8">
+  <title>Hospital Management System</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet"/>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f8f9fa;
+      margin: 0;
+    }
 
-    <!-- Navbar -->
-    <%- include('header.ejs') %>
+    .sidebar {
+      width: 250px;
+      height: 100vh;
+      background-color: #5567dc;
+      color: #fff;
+      position: fixed;
+      top: 0;
+      left: 0;
+      padding: 20px;
+    }
 
+    .sidebar h4 {
+      font-weight: bold;
+      margin-bottom: 30px;
+      text-align: center;
+    }
+
+    .nav-link {
+      color: #fff;
+      font-size: 16px;
+      padding: 10px 15px;
+      display: flex;
+      align-items: center;
+      border-radius: 5px;
+    }
+
+    .nav-link i {
+      margin-right: 10px;
+    }
+
+    .nav-link:hover {
+      background-color: #4455bb;
+      text-decoration: none;
+    }
+
+    .main-content {
+      margin-left: 250px;
+      padding: 40px 30px;
+    }
+
+    footer {
+      margin-left: 250px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <h4>HospitalSys</h4>
+    <ul class="nav flex-column">
+      <li class="nav-item">
+        <a class="nav-link" href="#"><i class="bi bi-grid-fill"></i> Dashboard</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#"><i class="bi bi-card-checklist"></i> Appointments</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#"><i class="bi bi-person-lines-fill"></i> Patients</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#"><i class="bi bi-plus-square-fill"></i> Doctors / Nurses</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#"><i class="bi bi-currency-dollar"></i> Finance</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#"><i class="bi bi-activity"></i> Monitor</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#"><i class="bi bi-person-circle"></i> Profile</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#"><i class="bi bi-gear-fill"></i> Settings</a>
+      </li>
+    </ul>
+  </div>
+
+  <!-- Main Content -->
+   <!-- Main Content -->
+  <div class="main-content">
     <!-- Hero Section -->
     <section class="py-5 text-center bg-light">
       <div class="container">
@@ -57,11 +135,11 @@
       <div class="container">
         <div class="row align-items-center">
           <div class="col-md-6">
-            <img src="/images/hospital_1.jpg" class="img-fluid rounded" alt="Hospital" />
+            <img src="/images/hospital_1.jpg" class="img-fluid rounded" alt="Hospital"/>
           </div>
           <div class="col-md-6">
             <h3>About Our Hospital</h3>
-            <p>Our mission is to provide high-quality, affordable, and accessible healthcare using modern digital solutions. We prioritize patient care, operational efficiency, and data security.</p>
+            <p>Our mission is to provide high-quality, affordable, and accessible healthcare using modern digital solutions.</p>
             <ul>
               <li>24/7 Emergency Support</li>
               <li>Highly Qualified Doctors</li>
@@ -72,7 +150,7 @@
       </div>
     </section>
 
-    <!-- Testimonials Section -->
+    <!-- Testimonials -->
     <section class="py-5 text-center">
       <div class="container">
         <h2 class="mb-5">What Our Users Say</h2>
@@ -99,7 +177,7 @@
       </div>
     </section>
 
-    <!-- Contact Section -->
+    <!-- Contact Section with Select/Option -->
     <section class="py-5 bg-light">
       <div class="container">
         <h2 class="text-center mb-4">Contact Us</h2>
@@ -115,6 +193,17 @@
                 <input type="email" class="form-control" id="email" placeholder="Enter your email" />
               </div>
               <div class="mb-3">
+                <label for="department" class="form-label">Select Department</label>
+                <select id="department" class="form-select">
+                  <option selected disabled>Choose a department</option>
+                  <option>General Inquiry</option>
+                  <option>Appointments</option>
+                  <option>Billing</option>
+                  <option>Support</option>
+                  <option>Careers</option>
+                </select>
+              </div>
+              <div class="mb-3">
                 <label for="message" class="form-label">Your Message</label>
                 <textarea class="form-control" id="message" rows="4" placeholder="Write your message..."></textarea>
               </div>
@@ -124,15 +213,16 @@
         </div>
       </div>
     </section>
+  </div>
 
-    <!-- Footer -->
-    <footer class="bg-primary text-white text-center py-3 mt-5">
-      <div class="container">
-        <p class="mb-0">&copy; 2025 HospitalSys. All rights reserved.</p>
-      </div>
-    </footer>
+  <!-- Footer -->
+  <footer class="bg-primary text-white text-center py-3">
+    <div class="container">
+      <p class="mb-0">&copy; 2025 HospitalSys. All rights reserved.</p>
+    </div>
+  </footer>
 
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-  </body>
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
 </html>
