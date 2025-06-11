@@ -90,6 +90,10 @@ exports.login = (req, res) => {
   });
 };
 
+exports.getcontactpage=(req,res)=>{
+  res.render("contact.ejs");
+};
+
 exports.getregisterpage=(req,res)=>{
   res.render("register.ejs");
 };
