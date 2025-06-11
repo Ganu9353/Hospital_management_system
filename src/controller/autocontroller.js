@@ -7,8 +7,14 @@ exports.register = async (req, res) => {
   try {
     const { name, email, password, role } = req.body;
 
-    // Check if email exists
-    const userExists = await userModel.findUserByEmail(email);
+    // Check if email already exists
+    const userExists = await new Promise((resolve, reject) => {
+      userModel.findUserByEmail(email, (err, result) => {
+        if (err) reject(err);
+        else resolve(result);
+      });
+    });
+
     if (userExists.length > 0) {
       return res.status(400).send("Email already registered");
     }
@@ -16,20 +22,20 @@ exports.register = async (req, res) => {
     // Hash password
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Create user
+    // Create user in 'users' table
     const userResult = await userModel.createUser(name, email, hashedPassword, role);
     const user_id = userResult.insertId;
 
-    // Role-specific insertion
+    // Insert role-specific data
     if (role === "admin") {
       const { admin_contact } = req.body;
       await insertAdmin(user_id, admin_contact);
     } else if (role === "doctor") {
-      const { doctor_specialization, doctor_contact, doctor_experience } = req.body;
-      await insertDoctor(user_id, doctor_specialization, doctor_contact, doctor_experience);
+      const { doctor_name, doctor_specialization, doctor_contact, doctor_experience } = req.body;
+      await insertDoctor(user_id, doctor_name, doctor_specialization, doctor_contact, doctor_experience);
     } else if (role === "reception") {
-      const { reception_contact } = req.body;
-      await insertReception(user_id, reception_contact);
+      const { reception_name, reception_contact } = req.body;
+      await insertReception(user_id, reception_name, reception_contact);
     }
 
     res.status(201).send("User registered successfully");
@@ -39,7 +45,7 @@ exports.register = async (req, res) => {
   }
 };
 
-// Insert into admin table
+// Insert into admin
 const insertAdmin = (user_id, admin_contact) => {
   return new Promise((resolve, reject) => {
     const sql = "INSERT INTO admin (admin_contact, user_id) VALUES (?, ?)";
@@ -50,34 +56,37 @@ const insertAdmin = (user_id, admin_contact) => {
   });
 };
 
-// Insert into doctor table
-const insertDoctor = (user_id, specialization, contact, experience) => {
+// Insert into doctor
+const insertDoctor = (user_id, doctor_name, specialization, contact, experience) => {
   return new Promise((resolve, reject) => {
-    const sql = `INSERT INTO doctor 
-      (doctor_name, doctor_specialization, doctor_contact, doctor_experience, status, user_id)
+    const sql = `
+      INSERT INTO doctor 
+      (doctor_name, doctor_specialization, doctor_contact, doctor_experience, status, user_id) 
       VALUES (?, ?, ?, ?, 'active', ?)`;
-    db.query(sql, ["", specialization, contact, experience, user_id], (err, result) => {
+    db.query(sql, [doctor_name, specialization, contact, experience, user_id], (err, result) => {
       if (err) reject(err);
       else resolve(result);
     });
   });
 };
 
-// Insert into reception table
-const insertReception = (user_id, contact) => {
+// Insert into reception
+const insertReception = (user_id, reception_name, contact) => {
   return new Promise((resolve, reject) => {
-    const sql = "INSERT INTO reception (reception_name, reception_contact, status, user_id) VALUES (?, ?, 'active', ?)";
-    db.query(sql, ["", contact, user_id], (err, result) => {
+    const sql = `
+      INSERT INTO reception 
+      (reception_name, reception_contact, status, user_id) 
+      VALUES (?, ?, 'active', ?)`;
+    db.query(sql, [reception_name, contact, user_id], (err, result) => {
       if (err) reject(err);
       else resolve(result);
     });
   });
 };
-
 
 exports.login = (req, res) => {
   const { email, password } = req.body;
-
+  res.render('sidebar.ejs');
   userModel.findUserByEmail(email, async (err, results) => {
     if (err || results.length === 0) return res.status(401).json({ message: 'Invalid credentials' });
 
