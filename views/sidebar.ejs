@@ -1,228 +1,36 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Hospital Management System</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet"/>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #f8f9fa;
-      margin: 0;
-    }
-
-    .sidebar {
-      width: 250px;
-      height: 100vh;
-      background-color: #5567dc;
-      color: #fff;
-      position: fixed;
-      top: 0;
-      left: 0;
-      padding: 20px;
-    }
-
-    .sidebar h4 {
-      font-weight: bold;
-      margin-bottom: 30px;
-      text-align: center;
-    }
-
-    .nav-link {
-      color: #fff;
-      font-size: 16px;
-      padding: 10px 15px;
-      display: flex;
-      align-items: center;
-      border-radius: 5px;
-    }
-
-    .nav-link i {
-      margin-right: 10px;
-    }
-
-    .nav-link:hover {
-      background-color: #4455bb;
-      text-decoration: none;
-    }
-
-    .main-content {
-      margin-left: 250px;
-      padding: 40px 30px;
-    }
-
-    footer {
-      margin-left: 250px;
-    }
-  </style>
-</head>
-<body>
-
-  <!-- Sidebar -->
-  <div class="sidebar">
-    <h4>HospitalSys</h4>
-    <ul class="nav flex-column">
-      <li class="nav-item">
-        <a class="nav-link" href="#"><i class="bi bi-grid-fill"></i> Dashboard</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="#"><i class="bi bi-card-checklist"></i> Appointments</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href=""><i class="bi bi-person-lines-fill"></i> Patients</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="#"><i class="bi bi-plus-square-fill"></i> Doctors / Nurses</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="#"><i class="bi bi-currency-dollar"></i> Finance</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="#"><i class="bi bi-activity"></i> Monitor</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="#"><i class="bi bi-person-circle"></i> Profile</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="#"><i class="bi bi-gear-fill"></i> Settings</a>
-      </li>
-    </ul>
-  </div>
-
-  <!-- Main Content -->
-   <!-- Main Content -->
-  <div class="main-content">
-    <!-- Hero Section -->
-    <section class="py-5 text-center bg-light">
-      <div class="container">
-        <h1 class="display-5 fw-bold">Welcome to Hospital Management System</h1>
-        <p class="lead">Efficiently manage patients, doctors, appointments, and more using our user-friendly system.</p>
-        <a href="/register" class="btn btn-primary btn-lg mt-3">Get Started</a>
-      </div>
-    </section>
-
-    <!-- Features Section -->
-    <section class="py-5">
-      <div class="container">
-        <h2 class="text-center mb-5">Core Features</h2>
-        <div class="row text-center g-4">
-          <div class="col-md-4">
-            <div class="card p-4 shadow-sm h-100">
-              <h4>Patient Management</h4>
-              <p class="text-muted">Register, update, and track patient records seamlessly.</p>
-            </div>
-          </div>
-          <div class="col-md-4">
-            <div class="card p-4 shadow-sm h-100">
-              <h4>Doctor Panel</h4>
-              <p class="text-muted">Assign doctors, view schedules, and manage availability.</p>
-            </div>
-          </div>
-          <div class="col-md-4">
-            <div class="card p-4 shadow-sm h-100">
-              <h4>Appointment Booking</h4>
-              <p class="text-muted">Schedule and manage patient appointments quickly.</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- About Us Section -->
-    <section class="py-5 bg-light">
-      <div class="container">
-        <div class="row align-items-center">
-          <div class="col-md-6">
-            <img src="/images/hospital_1.jpg" class="img-fluid rounded" alt="Hospital"/>
-          </div>
-          <div class="col-md-6">
-            <h3>About Our Hospital</h3>
-            <p>Our mission is to provide high-quality, affordable, and accessible healthcare using modern digital solutions.</p>
-            <ul>
-              <li>24/7 Emergency Support</li>
-              <li>Highly Qualified Doctors</li>
-              <li>Latest Technology Integration</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Testimonials -->
-    <section class="py-5 text-center">
-      <div class="container">
-        <h2 class="mb-5">What Our Users Say</h2>
-        <div class="row g-4">
-          <div class="col-md-4">
-            <div class="card p-4 shadow-sm">
-              <p>"This system made it super easy to manage patient records and appointments!"</p>
-              <h6>- Dr. Meena Patil</h6>
-            </div>
-          </div>
-          <div class="col-md-4">
-            <div class="card p-4 shadow-sm">
-              <p>"Simple to use and very efficient. Great for clinics and hospitals."</p>
-              <h6>- Administrator Suresh Jadhav</h6>
-            </div>
-          </div>
-          <div class="col-md-4">
-            <div class="card p-4 shadow-sm">
-              <p>"Booking appointments is now super fast for my patients!"</p>
-              <h6>- Dr. Arjun Deshmukh</h6>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Contact Section with Select/Option -->
-    <section class="py-5 bg-light">
-      <div class="container">
-        <h2 class="text-center mb-4">Contact Us</h2>
-        <div class="row justify-content-center">
-          <div class="col-md-8">
-            <form>
-              <div class="mb-3">
-                <label for="name" class="form-label">Full Name</label>
-                <input type="text" class="form-control" id="name" placeholder="Enter your name" />
-              </div>
-              <div class="mb-3">
-                <label for="email" class="form-label">Email Address</label>
-                <input type="email" class="form-control" id="email" placeholder="Enter your email" />
-              </div>
-              <div class="mb-3">
-                <label for="department" class="form-label">Select Department</label>
-                <select id="department" class="form-select">
-                  <option selected disabled>Choose a department</option>
-                  <option>General Inquiry</option>
-                  <option>Appointments</option>
-                  <option>Billing</option>
-                  <option>Support</option>
-                  <option>Careers</option>
-                </select>
-              </div>
-              <div class="mb-3">
-                <label for="message" class="form-label">Your Message</label>
-                <textarea class="form-control" id="message" rows="4" placeholder="Write your message..."></textarea>
-              </div>
-              <button type="submit" class="btn btn-primary">Send Message</button>
-            </form>
-          </div>
-        </div>
-      </div>
-    </section>
-  </div>
-
-  <!-- Footer -->
-  <footer class="bg-primary text-white text-center py-3">
-    <div class="container">
-      <p class="mb-0">&copy; 2025 HospitalSys. All rights reserved.</p>
-    </div>
-  </footer>
-
-  <!-- Bootstrap JS -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>
+<div class="sidebar"  style="margin-top: 48px;">
+  <ul class="nav flex-column">
+    <li class="nav-item">
+      <a class="nav-link" href="#"><i class="bi bi-grid-fill"></i> Dashboard</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="#"
+        ><i class="bi bi-calendar-check"></i> Appointments</a
+      >
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="#"
+        ><i class="bi bi-people-fill"></i> Patients</a
+      >
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="#"
+        ><i class="bi bi-person-plus-fill"></i> Doctors / Nurses</a
+      >
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="#"><i class="bi bi-cash-stack"></i> Finance</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="#"><i class="bi bi-activity"></i> Monitor</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="#"
+        ><i class="bi bi-person-circle"></i> Profile</a
+      >
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="#"><i class="bi bi-gear-fill"></i> Settings</a>
+    </li>
+  </ul>
+</div>
