@@ -120,125 +120,82 @@
 </head>
 <body>
   <nav class="sidebar" aria-label="Sidebar navigation">
-    <ul class="nav flex-column" role="menu">
-      <li class="nav-item" role="none">
-        <a class="nav-link active" href="#" role="menuitem" tabindex="0">
-          <i class="bi bi-grid-fill" aria-hidden="true"></i> Dashboard
-        </a>
-      </li>
+  <ul class="nav flex-column" role="menu" id="sidebarAccordion">
+    <li class="nav-item" role="none">
+      <a class="nav-link active" href="/dashboardMenu" role="menuitem">
+        <i class="bi bi-grid-fill"></i> Dashboard
+      </a>
+    </li>
 
-      <li class="nav-item" role="none">
-        <a class="nav-link d-flex justify-content-between align-items-center" 
-           data-bs-toggle="collapse" 
-           href="#appointmentsMenu"
-           role="button" 
-           aria-expanded="false" 
-           aria-controls="appointmentsMenu"
-           tabindex="-1">
-          <span><i class="bi bi-calendar-check" aria-hidden="true"></i> Appointments</span>
-          <i class="bi bi-chevron-down small" aria-hidden="true"></i>
-        </a>
-        <div class="collapse" id="appointmentsMenu">
-          <ul class="nav flex-column" role="menu">
-            <li class="nav-item" role="none">
-              <a class="nav-link" href="#" role="menuitem" tabindex="-1">Add Appointment</a>
-            </li>
-            <li class="nav-item" role="none">
-              <a class="nav-link" href="#" role="menuitem" tabindex="-1">View Appointments</a>
-            </li>
-            <li class="nav-item" role="none">
-              <a class="nav-link" href="#" role="menuitem" tabindex="-1">Edit Appointment</a>
-            </li>
-          </ul>
-        </div>
-      </li>
+    <!-- Appointments -->
+    <li class="nav-item" role="none">
+      <a class="nav-link d-flex justify-content-between align-items-center"
+         data-bs-toggle="collapse"
+         href="#appointmentsMenu"
+         role="button"
+         aria-expanded="false"
+         aria-controls="appointmentsMenu">
+        <span><i class="bi bi-calendar-check"></i>Appointment</span>
+        <i class="bi bi-chevron-down small"></i>
+      </a>
+      <div class="collapse" id="appointmentsMenu" data-bs-parent="#sidebarAccordion">
+        <ul class="nav flex-column">
+          <li><a class="nav-link" href="#">Add Appointment</a></li>
+          <li><a class="nav-link" href="#">View Appointments</a></li>
+          <li><a class="nav-link" href="#">Edit Appointment</a></li>
+        </ul>
+      </div>
+    </li>
 
-      <!-- Patients Dropdown -->
-      <li class="nav-item" role="none">
-        <a 
-          class="nav-link d-flex justify-content-between align-items-center" 
-          data-bs-toggle="collapse" 
-          href="#patientsMenu"
-          role="button" 
-          aria-expanded="false" 
-          aria-controls="patientsMenu"
-          tabindex="-1"
-        >
-          <span><i class="bi bi-people-fill" aria-hidden="true"></i> Patients</span>
-          <i class="bi bi-chevron-down small" aria-hidden="true"></i>
-        </a>
-        <div class="collapse" id="patientsMenu">
-          <ul class="nav flex-column" role="menu">
-            <li class="nav-item" role="none">
-              <a class="nav-link" href="/AddPatient" role="menuitem" tabindex="-1">Add Patient</a>
-            </li>
-            <li class="nav-item" role="none">
-              <a class="nav-link" href="#" role="menuitem" tabindex="-1">View Patients</a>
-            </li>
-            <li class="nav-item" role="none">
-              <a class="nav-link" href="#" role="menuitem" tabindex="-1">Patient Details</a>
-            </li>
-            <li class="nav-item" role="none">
-              <a class="nav-link" href="#" role="menuitem" tabindex="-1">Edit Patient</a>
-            </li>
-          </ul>
-        </div>
-      </li>
+    <!-- Patients -->
+    <li class="nav-item" role="none">
+      <a class="nav-link d-flex justify-content-between align-items-center"
+         data-bs-toggle="collapse"
+         href="#patientsMenu"
+         role="button"
+         aria-expanded="false"
+         aria-controls="patientsMenu">
+        <span><i class="bi bi-people-fill"></i> Patients</span>
+        <i class="bi bi-chevron-down small"></i>
+      </a>
+      <div class="collapse" id="patientsMenu" data-bs-parent="#sidebarAccordion">
+        <ul class="nav flex-column">
+          <li><a class="nav-link" href="#">Add Patient</a></li>
+          <li><a class="nav-link" href="#">View Patients</a></li>
+          <li><a class="nav-link" href="#">Patient Details</a></li>
+          <li><a class="nav-link" href="#">Edit Patient</a></li>
+        </ul>
+      </div>
+    </li>
 
-      <!-- Doctors / Nurses Dropdown -->
-      <li class="nav-item" role="none">
-        <a 
-          class="nav-link d-flex justify-content-between align-items-center"
-          data-bs-toggle="collapse"
-          href="#doctorsMenu"
-          role="button"
-          aria-expanded="false"
-          aria-controls="doctorsMenu"
-          tabindex="-1"
-        >
-          <span><i class="bi bi-person-plus-fill" aria-hidden="true"></i> Doctors / Nurses</span>
-          <i class="bi bi-chevron-down small" aria-hidden="true"></i>
-        </a>
-        <div class="collapse" id="doctorsMenu">
-          <ul class="nav flex-column" role="menu">
-            <li class="nav-item" role="none">
-              <a class="nav-link" href="#" role="menuitem" tabindex="-1">Add Doctor/Nurse</a>
-            </li>
-            <li class="nav-item" role="none">
-              <a class="nav-link" href="#" role="menuitem" tabindex="-1">View Doctors/Nurses</a>
-            </li>
-            <li class="nav-item" role="none">
-              <a class="nav-link" href="#" role="menuitem" tabindex="-1">Edit Doctor/Nurse</a>
-            </li>
-          </ul>
-        </div>
-      </li>
+    <!-- Doctors / Nurses -->
+    <li class="nav-item" role="none">
+      <a class="nav-link d-flex justify-content-between align-items-center"
+         data-bs-toggle="collapse"
+         href="#doctorsMenu"
+         role="button"
+         aria-expanded="false"
+         aria-controls="doctorsMenu">
+        <span><i class="bi bi-person-plus-fill"></i> Doctors / Nurses</span>
+        <i class="bi bi-chevron-down small"></i>
+      </a>
+      <div class="collapse" id="doctorsMenu" data-bs-parent="#sidebarAccordion">
+        <ul class="nav flex-column">
+          <li><a class="nav-link" href="#">Add Doctor/Nurse</a></li>
+          <li><a class="nav-link" href="#">View Doctors/Nurses</a></li>
+          <li><a class="nav-link" href="#">Edit Doctor/Nurse</a></li>
+        </ul>
+      </div>
+    </li>
 
-      <li class="nav-item" role="none">
-        <a class="nav-link" href="#" role="menuitem" tabindex="-1">
-          <i class="bi bi-cash-stack" aria-hidden="true"></i> Finance
-        </a>
-      </li>
+    <!-- Static Links -->
+    <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-cash-stack"></i> Finance</a></li>
+    <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-activity"></i> Monitor</a></li>
+    <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-person-circle"></i> Profile</a></li>
+    <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-gear-fill"></i> Settings</a></li>
+  </ul>
+</nav>
 
-      <li class="nav-item" role="none">
-        <a class="nav-link" href="#" role="menuitem" tabindex="-1">
-          <i class="bi bi-activity" aria-hidden="true"></i> Monitor
-        </a>
-      </li>
-
-      <li class="nav-item" role="none">
-        <a class="nav-link" href="#" role="menuitem" tabindex="-1">
-          <i class="bi bi-person-circle" aria-hidden="true"></i> Profile
-        </a>
-      </li>
-
-      <li class="nav-item" role="none">
-        <a class="nav-link" href="#" role="menuitem" tabindex="-1">
-          <i class="bi bi-gear-fill" aria-hidden="true"></i> Settings
-        </a>
-      </li>
-    </ul>
-  </nav>
 
   <!-- Bootstrap Bundle JS with Popper -->
   <script 

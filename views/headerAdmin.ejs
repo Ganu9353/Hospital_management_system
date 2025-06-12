@@ -6,9 +6,12 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
         .custom-header {
-            background-color: royalblue;
-            padding: 10px;
-        }
+    width: 100%;
+    height: 80px;
+    background-color: royalblue;
+    padding: 10px 20px;
+    z-index: 1030;
+  }
         .logout-button {
             background-color: white;
             color: black;
@@ -22,10 +25,10 @@
 </head>
 <body>
 
-    <header class="custom-header d-flex justify-content-between align-items-center">
-        <h1 class="text-white">Admin Dashboard</h1>
-        <button class="logout-button">Logout</button>
-    </header>
+    <header class="custom-header d-flex justify-content-between align-items-center fixed-top">
+  <h1 class="text-white">Admin Dashboard</h1>
+  <button class="logout-button">Logout</button>
+</header>
 
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>

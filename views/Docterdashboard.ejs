@@ -2,57 +2,82 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Doctor Dashboard - Hospital Management System</title>
-  <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-    />
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css"
-      rel="stylesheet"
-    />
-    <link rel="stylesheet" href="/css/style.css" />
- 
-  
-</head>
-<body>
-    <%- include('header') %> <%- include('Receptionsidebar') %>
 
-  <div class="container" style="margin-left: 1000px;">
-    <header class="dashboard-header">
-      <h1>Welcome Dr. Smith</h1>
-      <p class="lead">Here are your latest activities and schedules.</p>
-    </header>
-    
+  <!-- Bootstrap & Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet" />
+  <link rel="stylesheet" href="/css/style.css" />
+
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      overflow-x: hidden;
+      background-color: #f8f9fa;
+    }
+    .fake{
+        width: 100%;
+        height: 100px;
+    }
+    .content {
+              /* header height */
+      margin-left: 280px;       /* sidebar width */
+      padding: 20px;
+      min-height: calc(100vh - 105px);
+    }
+    h1, h2 {
+      font-weight: 600;
+    }
+    .btn-quick {
+      margin: 5px;
+    }
+    table {
+      font-size: 0.95rem;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Include Header and Sidebar -->
+  <%- include('headerDoctor') %>
+  <%- include('Doctersidebar') %>
+
+  <div class="fake"></div>
+  <!-- Main Content -->
+  <div class="content">
+    <h1>Welcome Dr. Smith</h1>
+    <p class="lead">Here are your latest activities and schedules.</p>
+
     <!-- Statistics -->
-    <section class="row mb-4 g-4">
-      <div class="col-md-3 col-6">
-        <div class="card p-3 text-center bg-white">
+    <div class="row mb-4 g-4">
+      <div class="col-md-3 col-6" >
+        <div class="card p-3 text-center bg-white shadow-sm">
           <h5>Patients Under Care</h5>
           <p class="display-6 text-primary" id="patients-count">28</p>
         </div>
       </div>
       <div class="col-md-3 col-6">
-        <div class="card p-3 text-center bg-white">
+        <div class="card p-3 text-center bg-white shadow-sm">
           <h5>Appointments Today</h5>
           <p class="display-6 text-success" id="appointments-today">6</p>
         </div>
       </div>
       <div class="col-md-3 col-6">
-        <div class="card p-3 text-center bg-white">
+        <div class="card p-3 text-center bg-white shadow-sm">
           <h5>Messages</h5>
           <p class="display-6 text-warning" id="messages-count">5</p>
         </div>
       </div>
       <div class="col-md-3 col-6">
-        <div class="card p-3 text-center bg-white">
+        <div class="card p-3 text-center bg-white shadow-sm">
           <h5>Pending Lab Results</h5>
           <p class="display-6 text-danger" id="lab-results-count">2</p>
         </div>
       </div>
-    </section>
-    
+    </div>
+
     <!-- Quick Actions -->
     <section class="mb-4">
       <h2>Quick Actions</h2>
@@ -61,13 +86,13 @@
       <button type="button" class="btn btn-outline-secondary btn-quick">View Lab Results</button>
       <button type="button" class="btn btn-outline-success btn-quick">Schedule Follow-up</button>
     </section>
-    
+
     <!-- Upcoming Appointments -->
     <section class="mb-5">
       <h2>Upcoming Appointments</h2>
-      <div class="table-responsive">
-        <table class="table table-hover align-middle bg-white rounded shadow-sm">
-          <thead>
+      <div class="table-responsive bg-white rounded shadow-sm">
+        <table class="table table-hover align-middle mb-0">
+          <thead class="table-light">
             <tr>
               <th>Patient Name</th>
               <th>Time</th>
@@ -76,41 +101,21 @@
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td>John Doe</td>
-              <td>09:00 AM</td>
-              <td>General checkup</td>
-              <td><span class="badge bg-success">Confirmed</span></td>
-            </tr>
-            <tr>
-              <td>Mary Johnson</td>
-              <td>10:30 AM</td>
-              <td>Consultation</td>
-              <td><span class="badge bg-warning text-dark">Pending</span></td>
-            </tr>
-            <tr>
-              <td>Robert Smith</td>
-              <td>11:30 AM</td>
-              <td>Follow-up</td>
-              <td><span class="badge bg-danger">Cancelled</span></td>
-            </tr>
-            <tr>
-              <td>Lisa Brown</td>
-              <td>01:00 PM</td>
-              <td>Flu symptoms</td>
-              <td><span class="badge bg-success">Confirmed</span></td>
-            </tr>
+            <tr><td>John Doe</td><td>09:00 AM</td><td>General checkup</td><td><span class="badge bg-success">Confirmed</span></td></tr>
+            <tr><td>Mary Johnson</td><td>10:30 AM</td><td>Consultation</td><td><span class="badge bg-warning text-dark">Pending</span></td></tr>
+            <tr><td>Robert Smith</td><td>11:30 AM</td><td>Follow-up</td><td><span class="badge bg-danger">Cancelled</span></td></tr>
+            <tr><td>Lisa Brown</td><td>01:00 PM</td><td>Flu symptoms</td><td><span class="badge bg-success">Confirmed</span></td></tr>
           </tbody>
         </table>
       </div>
     </section>
-    
+
     <!-- Patients List -->
     <section>
       <h2>Patients Under Your Care</h2>
-      <div class="table-responsive">
-        <table class="table table-striped align-middle bg-white rounded shadow-sm">
-          <thead>
+      <div class="table-responsive bg-white rounded shadow-sm">
+        <table class="table table-striped align-middle mb-0">
+          <thead class="table-light">
             <tr>
               <th>Name</th>
               <th>Age</th>
@@ -120,22 +125,17 @@
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td>John Doe</td><td>35</td><td>2024-05-21</td><td>Hypertension</td><td>2024-06-12</td>
-            </tr>
-            <tr>
-              <td>Mary Johnson</td><td>52</td><td>2024-04-30</td><td>Diabetes</td><td>2024-06-15</td>
-            </tr>
-            <tr>
-              <td>Robert Smith</td><td>45</td><td>2024-05-05</td><td>Asthma</td><td>2024-06-18</td>
-            </tr>
-            <tr>
-              <td>Lisa Brown</td><td>27</td><td>2024-05-15</td><td>Flu</td><td>2024-06-20</td>
-            </tr>
+            <tr><td>John Doe</td><td>35</td><td>2024-05-21</td><td>Hypertension</td><td>2024-06-12</td></tr>
+            <tr><td>Mary Johnson</td><td>52</td><td>2024-04-30</td><td>Diabetes</td><td>2024-06-15</td></tr>
+            <tr><td>Robert Smith</td><td>45</td><td>2024-05-05</td><td>Asthma</td><td>2024-06-18</td></tr>
+            <tr><td>Lisa Brown</td><td>27</td><td>2024-05-15</td><td>Flu</td><td>2024-06-20</td></tr>
           </tbody>
         </table>
       </div>
     </section>
   </div>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
