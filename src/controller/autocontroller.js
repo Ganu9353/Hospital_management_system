@@ -99,6 +99,9 @@ exports.login = (req, res) => {
   });
 };
 
+exports.getAddPatientPage=(req,res)=>{
+  res.render('patient.ejs');
+};
 exports.getcontactpage=(req,res)=>{
   res.render("contact.ejs");
 };

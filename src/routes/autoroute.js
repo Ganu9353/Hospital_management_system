@@ -8,6 +8,7 @@ router.get('/register', authController.getregisterpage);
 router.get('/login', authController.getloginpage);
 router.get('/about', authController.getaboutpage);
 router.get('/contact', authController.getcontactpage);
+router.get('/AddPatient', authController.getAddPatientPage);
 router.post('/register', authController.register);
 router.post('/login', authController.login);
 module.exports = router;

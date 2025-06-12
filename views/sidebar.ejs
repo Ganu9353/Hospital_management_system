@@ -1,36 +1,71 @@
-<div class="sidebar"  style="margin-top: 48px;">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+    <div class="sidebar" style="margin-top: 48px;">
   <ul class="nav flex-column">
     <li class="nav-item">
       <a class="nav-link" href="#"><i class="bi bi-grid-fill"></i> Dashboard</a>
     </li>
+
     <li class="nav-item">
-      <a class="nav-link" href="#"
-        ><i class="bi bi-calendar-check"></i> Appointments</a
-      >
+      <a class="nav-link" href="#"><i class="bi bi-calendar-check"></i> Appointments</a>
     </li>
+
+    <!-- Patients Dropdown -->
     <li class="nav-item">
-      <a class="nav-link" href="#"
-        ><i class="bi bi-people-fill"></i> Patients</a
-      >
+      <a class="nav-link" data-bs-toggle="collapse" href="#patientsMenu" role="button" aria-expanded="false" aria-controls="patientsMenu">
+        <i class="bi bi-people-fill"></i> Patients
+      </a>
+      <div class="collapse ps-3" id="patientsMenu">
+        <ul class="nav flex-column">
+          <li class="nav-item"><a class="nav-link" href="/AddPatient">Add Patient</a></li>
+          <li class="nav-item"><a class="nav-link" href="#">View Patients</a></li>
+          <li class="nav-item"><a class="nav-link" href="#">Patient Details</a></li>
+          <li class="nav-item"><a class="nav-link" href="#">Edit Patient</a></li>
+        </ul>
+      </div>
     </li>
+
     <li class="nav-item">
-      <a class="nav-link" href="#"
-        ><i class="bi bi-person-plus-fill"></i> Doctors / Nurses</a
-      >
+      <a class="nav-link" href="#"><i class="bi bi-person-plus-fill"></i> Doctors / Nurses</a>
     </li>
+
     <li class="nav-item">
       <a class="nav-link" href="#"><i class="bi bi-cash-stack"></i> Finance</a>
     </li>
+
     <li class="nav-item">
       <a class="nav-link" href="#"><i class="bi bi-activity"></i> Monitor</a>
     </li>
+
     <li class="nav-item">
-      <a class="nav-link" href="#"
-        ><i class="bi bi-person-circle"></i> Profile</a
-      >
+      <a class="nav-link" href="#"><i class="bi bi-person-circle"></i> Profile</a>
     </li>
+
     <li class="nav-item">
       <a class="nav-link" href="#"><i class="bi bi-gear-fill"></i> Settings</a>
     </li>
   </ul>
 </div>
+
+  <script>
+  // When any submenu link is clicked, collapse the parent menu
+  document.querySelectorAll('#patientsMenu .nav-link').forEach(function(link) {
+    link.addEventListener('click', function () {
+      var collapseElement = document.getElementById('patientsMenu');
+      var bsCollapse = bootstrap.Collapse.getInstance(collapseElement);
+      if (bsCollapse) {
+        bsCollapse.hide();
+      }
+    });
+  });
+</script>
+
+
+</body>
+</html>
