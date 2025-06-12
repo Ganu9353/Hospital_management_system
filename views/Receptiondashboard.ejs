@@ -13,24 +13,37 @@
       rel="stylesheet"
     />
     <link rel="stylesheet" href="/css/style.css" />
+    <style>
+      body {
+        padding-top: 105px;
+      }
+      .main-content {
+        margin-left: 280px;
+        margin-top: 0;
+      }
+    </style>
   </head>
   <body>
-    <%- include('header') %> <%- include('Adminsidebar') %>
-    
+    <%- include('headerReception') %> <%- include('Receptionsidebar') %>
+
     <!-- Main Dashboard Content -->
     <div class="main-content p-4">
-      <h1 class="mb-3 text-primary">🏥 Welcome to Hospital Management Dashboard</h1>
+      <h1 class="mb-3 text-primary">
+        🏥 Welcome to Hospital Management Dashboard
+      </h1>
       <p class="text-muted">
-        This dashboard helps you efficiently manage hospital operations like patient records, appointments, billing, staff, and more.
+        This dashboard helps you efficiently manage hospital operations like
+        patient records, appointments, billing, staff, and more.
       </p>
-
       <!-- Dashboard Modules -->
       <div class="row g-4 mt-4">
         <!-- Patient Management -->
         <div class="col-md-4">
           <div class="card p-4 shadow-sm">
             <h5><i class="bi bi-person-vcard me-2"></i>Patient Management</h5>
-            <p class="text-muted">Register patients and manage their complete medical history.</p>
+            <p class="text-muted">
+              Register patients and manage their complete medical history.
+            </p>
           </div>
         </div>
 
@@ -38,7 +51,9 @@
         <div class="col-md-4">
           <div class="card p-4 shadow-sm">
             <h5><i class="bi bi-calendar-check me-2"></i>Appointment System</h5>
-            <p class="text-muted">Schedule, view, and manage doctor-patient appointments.</p>
+            <p class="text-muted">
+              Schedule, view, and manage doctor-patient appointments.
+            </p>
           </div>
         </div>
 
@@ -46,7 +61,9 @@
         <div class="col-md-4">
           <div class="card p-4 shadow-sm">
             <h5><i class="bi bi-receipt me-2"></i>Billing Module</h5>
-            <p class="text-muted">Generate invoices and track financial transactions easily.</p>
+            <p class="text-muted">
+              Generate invoices and track financial transactions easily.
+            </p>
           </div>
         </div>
 
@@ -54,7 +71,9 @@
         <div class="col-md-4">
           <div class="card p-4 shadow-sm">
             <h5><i class="bi bi-person-badge me-2"></i>Staff Management</h5>
-            <p class="text-muted">Manage hospital staff roles, duties, and schedules.</p>
+            <p class="text-muted">
+              Manage hospital staff roles, duties, and schedules.
+            </p>
           </div>
         </div>
 
@@ -62,15 +81,21 @@
         <div class="col-md-4">
           <div class="card p-4 shadow-sm">
             <h5><i class="bi bi-box-seam me-2"></i>Inventory Control</h5>
-            <p class="text-muted">Monitor medicine stocks, equipment, and supplies.</p>
+            <p class="text-muted">
+              Monitor medicine stocks, equipment, and supplies.
+            </p>
           </div>
         </div>
 
         <!-- Reports -->
         <div class="col-md-4">
           <div class="card p-4 shadow-sm">
-            <h5><i class="bi bi-bar-chart-line me-2"></i>Reports & Analytics</h5>
-            <p class="text-muted">Analyze patient flow, finances, and staff performance.</p>
+            <h5>
+              <i class="bi bi-bar-chart-line me-2"></i>Reports & Analytics
+            </h5>
+            <p class="text-muted">
+              Analyze patient flow, finances, and staff performance.
+            </p>
           </div>
         </div>
       </div>

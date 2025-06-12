@@ -86,7 +86,7 @@ const insertReception = (user_id, reception_name, contact) => {
 
 exports.login = (req, res) => {
   const { email, password } = req.body;
-  res.render('Docterdashboard.ejs');
+  res.render('Admindashboard.ejs');
   userModel.findUserByEmail(email, async (err, results) => {
     if (err || results.length === 0) return res.status(401).json({ message: 'Invalid credentials' });
 
@@ -99,6 +99,18 @@ exports.login = (req, res) => {
   });
 };
 
+
+
+exports.getAddDocter=(req,res)=>{
+  res.render("addDoctor.ejs");
+};
+exports.getdashboardpage=(req,res)=>{
+  res.render("Receptiondashboard.ejs");
+};
+
+exports.logout=(req,res)=>{
+  res.render("homepage.ejs");
+};
 exports.getAddPatientPage=(req,res)=>{
   res.render('patient.ejs');
 };

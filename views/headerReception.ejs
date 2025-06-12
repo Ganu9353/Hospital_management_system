@@ -1,15 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+    />
     <style>
-        .custom-header {
-            background-color: royalblue;
-            padding: 10px;
-        }
-        .logout-button {
+      .custom-header {
+        height: 105px;
+        background-color: royalblue;
+        padding: 10px 30px;
+        z-index: 1030;
+      }
+      body {
+        padding-top: 105px; /* Push page content below fixed header */
+      }
+      .logout-button {
             background-color: white;
             color: black;
             border: none;
@@ -19,16 +27,19 @@
         }
     </style>
     <title>Admin Dashboard</title>
-</head>
-<body>
-
-    <header class="custom-header d-flex justify-content-between align-items-center">
-        <h1 class="text-white">Reception Dashboard</h1>
-        <button class="logout-button">Logout</button>
+  </head>
+  <body>
+    <header
+      class="custom-header d-flex justify-content-between align-items-center position-fixed top-0 start-0 w-100 z-3"
+    >
+      <h1 class="text-white">Reception Dashboard</h1>
+      <button class="logout-button">
+        <a href="/logout" class="text-decoration-none text-dark"><a href="/logout">Logout</a></a>
+      </button>
     </header>
 
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-</body>
+  </body>
 </html>
