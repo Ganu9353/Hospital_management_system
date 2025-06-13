@@ -1,23 +1,26 @@
 const express = require('express');
-const session = require('express-session');
-const bodyParser = require('body-parser');
 const path = require('path');
+const session = require('express-session');
+const app = express();
 require('dotenv').config();
 
-const app = express();
+const authRoutes = require('../src/routes/autoroute');
 
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(express.static("public"));
+app.use(express.urlencoded({ extended: true }));
+app.use(express.static(path.join(__dirname, 'public')));
 app.set('view engine', 'ejs');
 
 app.use(session({
-  secret: 'hospital-secret',
+  secret: 'your_secret_key',
   resave: false,
   saveUninitialized: false,
 }));
 
+app.use('/', authRoutes);
 
-app.use(require('./routes/autoroute'));
-
+// 404
+app.use((req, res) => {
+  res.status(404).send('Page Not Found');
+});
 
 module.exports = app;
