@@ -1,111 +1,109 @@
 const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
 const userModel = require("../models/userModel");
-const db = require("../config/db");
+const roleModel = require('../models/roleModel');
 
 exports.register = async (req, res) => {
-  try {
-    const { name, email, password, role } = req.body;
+  const { name, email, password, role } = req.body;
 
-    // Check if email already exists
-    const userExists = await new Promise((resolve, reject) => {
-      userModel.findUserByEmail(email, (err, result) => {
-        if (err) reject(err);
-        else resolve(result);
-      });
-    });
 
-    if (userExists.length > 0) {
-      return res.status(400).send("Email already registered");
+  userModel.findUserByUsername(email, (err, existingUser) => {
+    if (err) {
+      return res.render("register", { message: "Server error. Try again." });
     }
 
-    // Hash password
-    const hashedPassword = await bcrypt.hash(password, 10);
-
-    // Create user in 'users' table
-    const userResult = await userModel.createUser(name, email, hashedPassword, role);
-    const user_id = userResult.insertId;
-
-    // Insert role-specific data
-    if (role === "admin") {
-      const { admin_contact } = req.body;
-      await insertAdmin(user_id, admin_contact);
-    } else if (role === "doctor") {
-      const { doctor_name, doctor_specialization, doctor_contact, doctor_experience } = req.body;
-      await insertDoctor(user_id, doctor_name, doctor_specialization, doctor_contact, doctor_experience);
-    } else if (role === "reception") {
-      const { reception_name, reception_contact } = req.body;
-      await insertReception(user_id, reception_name, reception_contact);
+    if (existingUser) {
+      return res.render("register", { message: "Email already registered!" });
     }
 
-    res.status(201).send("User registered successfully");
-  } catch (error) {
-    console.error(error);
-    res.status(500).send("Server error");
-  }
+  userModel.createUser(name, email, password, role, (err, userId) => {
+    if (err) return res.status(500).send('Error creating user');
+
+    switch (role) {
+      case 'admin':
+        roleModel.saveAdmin(req.body.admin_contact, userId, afterSave);
+        break;
+      case 'doctor':
+        roleModel.saveDoctor(name, req.body.doctor_specialization, req.body.doctor_contact, req.body.doctor_experience, userId, 1, afterSave); // hardcoded admin_id = 1
+        break;
+      case 'RECEPTIONIST':
+        roleModel.saveReception(name, req.body.reception_contact, userId, 1, afterSave); // hardcoded admin_id = 1
+        break;
+      default:
+        res.status(400).send('Invalid role');
+    }
+
+    function afterSave(err2) {
+      if (err2) return res.status(500).send('Role-specific data insert error');
+      res.redirect('/register'); // or send success message
+    }
+  });
+});
 };
 
-// Insert into admin
-const insertAdmin = (user_id, admin_contact) => {
-  return new Promise((resolve, reject) => {
-    const sql = "INSERT INTO admin (admin_contact, user_id) VALUES (?, ?)";
-    db.query(sql, [admin_contact, user_id], (err, result) => {
-      if (err) reject(err);
-      else resolve(result);
-    });
-  });
-};
-
-// Insert into doctor
-const insertDoctor = (user_id, doctor_name, specialization, contact, experience) => {
-  return new Promise((resolve, reject) => {
-    const sql = `
-      INSERT INTO doctor 
-      (doctor_name, doctor_specialization, doctor_contact, doctor_experience, status, user_id) 
-      VALUES (?, ?, ?, ?, 'active', ?)`;
-    db.query(sql, [doctor_name, specialization, contact, experience, user_id], (err, result) => {
-      if (err) reject(err);
-      else resolve(result);
-    });
-  });
-};
-
-// Insert into reception
-const insertReception = (user_id, reception_name, contact) => {
-  return new Promise((resolve, reject) => {
-    const sql = `
-      INSERT INTO reception 
-      (reception_name, reception_contact, status, user_id) 
-      VALUES (?, ?, 'active', ?)`;
-    db.query(sql, [reception_name, contact, user_id], (err, result) => {
-      if (err) reject(err);
-      else resolve(result);
-    });
-  });
-};
 
 exports.login = (req, res) => {
   const { email, password } = req.body;
-  res.render('Admindashboard.ejs');
-  userModel.findUserByEmail(email, async (err, results) => {
-    if (err || results.length === 0) return res.status(401).json({ message: 'Invalid credentials' });
 
-    const user = results[0];
-    const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) return res.status(401).json({ message: 'Invalid credentials' });
+  userModel.findUserByUsername(email, async (err, user) => {
+    if (err) throw err;
 
-    const token = jwt.sign({ id: user.id, role: user.role }, process.env.JWT_SECRET, { expiresIn: '1h' });
-    res.status(200).json({ token, user: { id: user.id, name: user.name, role: user.role } });
+    if (!user) {
+      return res.render('login', { message: 'Invalid email or password.' });
+    }
+    
+    if (!(password==user.password)) {
+      return res.render('login', { message: 'Incorrect password.' });
+    }
+
+    req.session.user = { id: user.user_id, role: user.role };
+    // Redirect based on role
+    switch (user.role) {
+      case 'ADMIN':
+        return res.redirect('/Admindashboard');
+      case 'DOCTOR':
+        return res.redirect('/Docterdashboard');
+      case 'RECEPTIONIST':
+        return res.redirect('/Receptiondashboard');
+      default:
+        return res.render('login', { message: 'Unknown role.' });
+    }
   });
 };
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+exports.getAdmindashboard=(req,res)=>{
+  res.render('Admindashboard.ejs');
+};
+exports.getDocterdashboard=(req,res)=>{
+  res.render('Docterdashboard.ejs');
+};
+exports.getReceptiondashboard=(req,res)=>{
+  res.render('Receptiondashboard.ejs');
+};
+exports.getInsurance=(req,res)=>{
+  res.render("Insurancepage.ejs");
+};
 exports.getAddDocter=(req,res)=>{
   res.render("addDoctor.ejs");
-};
-exports.getdashboardpage=(req,res)=>{
-  res.render("Receptiondashboard.ejs");
 };
 
 exports.logout=(req,res)=>{
@@ -119,13 +117,13 @@ exports.getcontactpage=(req,res)=>{
 };
 
 exports.getregisterpage=(req,res)=>{
-  res.render("register.ejs");
+  res.render("register.ejs", { message: null });
 };
 exports.gethomepage=(req,res)=>{
   res.render("homepage.ejs");
 };
 exports.getloginpage=(req,res)=>{
-  res.render("login.ejs");
+   res.render('login.ejs', { message: null });
 };
 exports.getaboutpage=(req,res)=>{
   res.render("about.ejs");

@@ -27,15 +27,12 @@
     }
 
     .sidebar {
-      margin-top: 48px;
-      max-width: 280px;
-      height: calc(100vh - 48px);
+      width: 250px;
+      height: 100vh;
       background: #14cbdc;
-      border-right: 1px solid #e3e6f0;
-      padding: 32px 24px;
       overflow-y: auto;
-      display: flex;
-      flex-direction: column;
+      padding: 32px 24px;
+      z-index: 1020;
     }
 
     .sidebar .nav-link {
@@ -120,82 +117,81 @@
 </head>
 <body>
   <nav class="sidebar" aria-label="Sidebar navigation">
-  <ul class="nav flex-column" role="menu" id="sidebarAccordion">
-    <li class="nav-item" role="none">
-      <a class="nav-link active" href="/dashboardMenu" role="menuitem">
-        <i class="bi bi-grid-fill"></i> Dashboard
-      </a>
-    </li>
+    <ul class="nav flex-column" role="menu" id="sidebarAccordion">
+      <li class="nav-item" role="none">
+        <a class="nav-link active" href="/dashboardMenu" role="menuitem">
+          <i class="bi bi-grid-fill"></i>Doctor Dashboard
+        </a>
+      </li>
 
-    <!-- Appointments -->
-    <li class="nav-item" role="none">
-      <a class="nav-link d-flex justify-content-between align-items-center"
-         data-bs-toggle="collapse"
-         href="#appointmentsMenu"
-         role="button"
-         aria-expanded="false"
-         aria-controls="appointmentsMenu">
-        <span><i class="bi bi-calendar-check"></i>Appointment</span>
-        <i class="bi bi-chevron-down small"></i>
-      </a>
-      <div class="collapse" id="appointmentsMenu" data-bs-parent="#sidebarAccordion">
-        <ul class="nav flex-column">
-          <li><a class="nav-link" href="#">Add Appointment</a></li>
-          <li><a class="nav-link" href="#">View Appointments</a></li>
-          <li><a class="nav-link" href="#">Edit Appointment</a></li>
-        </ul>
-      </div>
-    </li>
+      <!-- Appointments -->
+      <li class="nav-item" role="none">
+        <a class="nav-link d-flex justify-content-between align-items-center"
+           data-bs-toggle="collapse"
+           href="#appointmentsMenu"
+           role="button"
+           aria-expanded="false"
+           aria-controls="appointmentsMenu">
+          <span><i class="bi bi-calendar-check"></i>Appointment</span>
+          <i class="bi bi-chevron-down small"></i>
+        </a>
+        <div class="collapse" id="appointmentsMenu" data-bs-parent="#sidebarAccordion">
+          <ul class="nav flex-column">
+            <li><a class="nav-link" href="#">Add Appointment</a></li>
+            <li><a class="nav-link" href="#">View Appointments</a></li>
+            <li><a class="nav-link" href="#">Edit Appointment</a></li>
+          </ul>
+        </div>
+      </li>
 
-    <!-- Patients -->
-    <li class="nav-item" role="none">
-      <a class="nav-link d-flex justify-content-between align-items-center"
-         data-bs-toggle="collapse"
-         href="#patientsMenu"
-         role="button"
-         aria-expanded="false"
-         aria-controls="patientsMenu">
-        <span><i class="bi bi-people-fill"></i> Patients</span>
-        <i class="bi bi-chevron-down small"></i>
-      </a>
-      <div class="collapse" id="patientsMenu" data-bs-parent="#sidebarAccordion">
-        <ul class="nav flex-column">
-          <li><a class="nav-link" href="#">Add Patient</a></li>
-          <li><a class="nav-link" href="#">View Patients</a></li>
-          <li><a class="nav-link" href="#">Patient Details</a></li>
-          <li><a class="nav-link" href="#">Edit Patient</a></li>
-        </ul>
-      </div>
-    </li>
+      <!-- Patients -->
+      <li class="nav-item" role="none">
+        <a class="nav-link d-flex justify-content-between align-items-center"
+           data-bs-toggle="collapse"
+           href="#patientsMenu"
+           role="button"
+           aria-expanded="false"
+           aria-controls="patientsMenu">
+          <span><i class="bi bi-people-fill"></i> Patients</span>
+          <i class="bi bi-chevron-down small"></i>
+        </a>
+        <div class="collapse" id="patientsMenu" data-bs-parent="#sidebarAccordion">
+          <ul class="nav flex-column">
+            <li><a class="nav-link" href="#">Add Patient</a></li>
+            <li><a class="nav-link" href="#">View Patients</a></li>
+            <li><a class="nav-link" href="#">Patient Details</a></li>
+            <li><a class="nav-link" href="#">Edit Patient</a></li>
+          </ul>
+        </div>
+      </li>
 
-    <!-- Doctors / Nurses -->
-    <li class="nav-item" role="none">
-      <a class="nav-link d-flex justify-content-between align-items-center"
-         data-bs-toggle="collapse"
-         href="#doctorsMenu"
-         role="button"
-         aria-expanded="false"
-         aria-controls="doctorsMenu">
-        <span><i class="bi bi-person-plus-fill"></i> Doctors / Nurses</span>
-        <i class="bi bi-chevron-down small"></i>
-      </a>
-      <div class="collapse" id="doctorsMenu" data-bs-parent="#sidebarAccordion">
-        <ul class="nav flex-column">
-          <li><a class="nav-link" href="#">Add Doctor/Nurse</a></li>
-          <li><a class="nav-link" href="#">View Doctors/Nurses</a></li>
-          <li><a class="nav-link" href="#">Edit Doctor/Nurse</a></li>
-        </ul>
-      </div>
-    </li>
+      <!-- Doctors / Nurses -->
+      <li class="nav-item" role="none">
+        <a class="nav-link d-flex justify-content-between align-items-center"
+           data-bs-toggle="collapse"
+           href="#doctorsMenu"
+           role="button"
+           aria-expanded="false"
+           aria-controls="doctorsMenu">
+          <span><i class="bi bi-person-plus-fill"></i> Nurses</span>
+          <i class="bi bi-chevron-down small"></i>
+        </a>
+        <div class="collapse" id="doctorsMenu" data-bs-parent="#sidebarAccordion">
+          <ul class="nav flex-column">
+            <li><a class="nav-link" href="#">Add Doctor/Nurse</a></li>
+            <li><a class="nav-link" href="#">View Doctors/Nurses</a></li>
+            <li><a class="nav-link" href="#">Edit Doctor/Nurse</a></li>
+          </ul>
+        </div>
+      </li>
 
-    <!-- Static Links -->
-    <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-cash-stack"></i> Finance</a></li>
-    <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-activity"></i> Monitor</a></li>
-    <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-person-circle"></i> Profile</a></li>
-    <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-gear-fill"></i> Settings</a></li>
-  </ul>
-</nav>
-
+      <!-- Static Links -->
+      <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-cash-stack"></i> Finance</a></li>
+      <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-activity"></i> Monitor</a></li>
+      <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-person-circle"></i> Profile</a></li>
+      <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-gear-fill"></i> Settings</a></li>
+    </ul>
+  </nav>
 
   <!-- Bootstrap Bundle JS with Popper -->
   <script 

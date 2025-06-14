@@ -1,7 +1,6 @@
 const express = require('express');
 const router = express.Router();
 const authController = require('../controller/autocontroller');
-const app=require("../app");
 
 router.get('/', authController.gethomepage);
 router.get('/register', authController.getregisterpage);
@@ -11,10 +10,16 @@ router.get('/contact', authController.getcontactpage);
 router.get('/AddPatient', authController.getAddPatientPage);
 router.get('/logout', authController.logout)
 router.get('/Adddocter', authController.getAddDocter);
-
-
-
-router.get('/dashboardMenu', authController.getdashboardpage);
+router.get('/Insurance', authController.getInsurance);
+router.get('/logout', (req, res) => {
+  req.session.destroy();
+  res.redirect('/login');
+});
+router.get('/Admindashboard', authController.getAdmindashboard);
+router.get('/Docterdashboard', authController.getDocterdashboard);
+router.get('/Receptiondashboard', authController.getReceptiondashboard);
 router.post('/register', authController.register);
 router.post('/login', authController.login);
+
+
 module.exports = router;
