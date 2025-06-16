@@ -29,7 +29,6 @@ router.get('/editDoctor', authController.editDoctorForm);
 router.get('/deleteDoctor', authController.deleteDoctor);
 router.post('/update', authController.updateDoctor);
 router.get('/Receptiondashboard', authController.getReceptiondashboard);
-router.post('/register', authController.register);
 router.post('/login', authController.login);
 
 

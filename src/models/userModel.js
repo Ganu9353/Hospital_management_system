@@ -9,14 +9,6 @@ exports.findUserByUsername = (username, callback) => {
   });
 };
 
-exports.createUser = (name, email, password, role, callback) => {
-  const sql = 'INSERT INTO users (username, password, role) VALUES (?,?,?);';
-  db.query(sql, [email, password, role], (err, result) => {
-    if (err) return callback(err);
-    callback(null, result.insertId); // return inserted user_id
-  });
-};
-
 exports.getAllReceptions = (callback) => {
   const sql = `
     SELECT r.reception_id AS id, r.reception_name AS name, 
