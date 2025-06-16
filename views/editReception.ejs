@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Edit Reception</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <style>
+    .glass-card {
+      background: rgba(255, 255, 255, 0.25);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-radius: 20px;
+      box-shadow: 0 8px 32px rgba(31, 38, 135, 0.2);
+      padding: 40px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    .card-header {
+      background-color: #0d6efd;
+      color: white;
+      padding: 15px;
+      border-radius: 15px 15px 0 0;
+      font-size: 1.8rem;
+      font-weight: bold;
+      text-align: center;
+    }
+
+    .form-label {
+      font-weight: 600;
+    }
+
+    .form-control {
+      border-radius: 12px;
+      border: none;
+      padding: 10px 15px;
+      background-color: rgba(242, 236, 236, 0.7);
+    }
+
+    .form-control:focus {
+      box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
+      border: 1px solid #0d6efd;
+    }
+  </style>
+</head>
+<body>
+  <%- include('header1') %>
+  <%- include('Adminsidebar') %>
+
+  <div class="content" style="margin-left: 250px; padding: 20px; margin-top: 100px;">
+    <div class="card-header" style="background-color: #0d6efd;">
+        View Reception
+      </div>
+    <div class="glass-card">
+      <form action="/updateReception" method="POST">
+        <input type="hidden" name="reception_id" value="<%= reception.reception_id %>">
+
+        <div class="mb-3">
+          <label class="form-label">Reception Name</label>
+          <input type="text" class="form-control" name="reception_name" value="<%= reception.reception_name %>" required />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Reception Contact</label>
+          <input type="text" class="form-control" name="reception_contact" value="<%= reception.reception_contact %>" required />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Status</label>
+          <input type="text" class="form-control" name="status" value="<%= reception.status %>" required />
+        </div>
+
+        <div class="row mt-4">
+          <div class="col-md-6">
+            <button type="submit" class="btn btn-primary w-100" style="border-radius: 12px; font-weight: 600;">Update</button>
+          </div>
+          <div class="col-md-6">
+            <a href="/viewReception" class="btn btn-secondary w-100" style="border-radius: 12px; font-weight: 600;">Cancel</a>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

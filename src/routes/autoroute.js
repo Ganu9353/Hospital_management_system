@@ -17,6 +17,17 @@ router.get('/logout', (req, res) => {
 });
 router.get('/Admindashboard', authController.getAdmindashboard);
 router.get('/Docterdashboard', authController.getDocterdashboard);
+router.get('/viewreception', authController.viewReceptionist);
+router.get("/deleteReception", authController.deleteReception);
+
+router.get("/editReception", authController.editReceptionForm);
+// Update POST route
+router.post("/updateReception", authController.updateReception);
+router.get('/viewdoctor',authController.viewDoctors);
+
+router.get('/editDoctor', authController.editDoctorForm);
+router.get('/deleteDoctor', authController.deleteDoctor);
+router.post('/update', authController.updateDoctor);
 router.get('/Receptiondashboard', authController.getReceptiondashboard);
 router.post('/register', authController.register);
 router.post('/login', authController.login);

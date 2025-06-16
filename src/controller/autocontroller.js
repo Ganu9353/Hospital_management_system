@@ -23,7 +23,7 @@ exports.register = async (req, res) => {
         roleModel.saveAdmin(req.body.admin_contact, userId, afterSave);
         break;
       case 'doctor':
-        roleModel.saveDoctor(name, req.body.doctor_specialization, req.body.doctor_contact, req.body.doctor_experience, userId, 1, afterSave); // hardcoded admin_id = 1
+        roleModel.saveDoctor(name, req.body.doctor_specialization, req.body.doctor_contact, req.body.doctor_experience,req.body.age,req.body.gender, userId, 1, afterSave); // hardcoded admin_id = 1
         break;
       case 'RECEPTIONIST':
         roleModel.saveReception(name, req.body.reception_contact, userId, 1, afterSave); // hardcoded admin_id = 1
@@ -86,6 +86,85 @@ exports.login = (req, res) => {
 
 
 
+
+
+exports.viewReceptionist=(req,res)=>{
+  userModel.getAllReceptions((err, data) => {
+    if (err) {
+      console.error("Error fetching reception data:", err);
+      return res.status(500).send("Internal Server Error");
+    }
+    res.render("viewReceptionist.ejs", { receptionist: data });
+  });
+};
+exports.deleteReception = (req, res) => {
+  const id = req.query.id;
+  userModel.deleteReceptionById(id, (err, result) => {
+    if (err) {
+      return res.status(500).send("Error deleting reception");
+    }
+    res.redirect("/viewReception");
+  });
+};
+
+
+exports.editReceptionForm = (req, res) => {
+  const id = req.query.id;
+  userModel.getReceptionById(id, (err, result) => {
+    if (err) return res.status(500).send("Error fetching reception");
+    res.render("editReception", { reception: result[0] });
+  });
+};
+
+// Handle form submission
+exports.updateReception = (req, res) => {
+  const updatedData = {
+    reception_id: req.body.reception_id,
+    reception_name: req.body.reception_name,
+    reception_contact: req.body.reception_contact,
+    status: req.body.status,
+  };
+
+  userModel.updateReception(updatedData, (err, result) => {
+    if (err) return res.status(500).send("Error updating reception");
+    res.redirect("/viewReception");
+  });
+};
+
+exports.viewDoctors = (req, res) => {
+  userModel.getAllDoctors((err, doctors) => {
+    if (err) {
+      console.error('Error fetching doctors:', err);
+      return res.status(500).send('Server Error');
+    }
+    res.render('viewdoctor', { doctors });
+  });
+};
+
+// Load edit form
+exports.editDoctorForm = (req, res) => {
+  const id = req.query.id;
+  userModel.getDoctorById(id, (err, results) => {
+    if (err || results.length === 0) return res.status(404).send("Doctor not found");
+    res.render('editDoctor', { doctor: results[0] });
+  });
+};
+// Delete doctor
+exports.deleteDoctor = (req, res) => {
+  const id = req.query.id;
+  userModel.deleteDoctor(id, (err) => {
+    if (err) return res.status(500).send("Error deleting doctor");
+    res.redirect('/viewDoctors');
+  });
+};
+
+// Update doctor
+exports.updateDoctor = (req, res) => {
+  userModelModel.updateDoctor(req.body, (err) => {
+    if (err) return res.status(500).send("Error updating doctor");
+    res.redirect('/doctors/view');
+  });
+};
 
 
 
