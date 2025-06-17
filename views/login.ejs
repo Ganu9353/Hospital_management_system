@@ -4,116 +4,170 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Login | Hospital Management</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
   <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+
     body, html {
+      height: 100%;
       margin: 0;
-      padding: 0;
-      min-height: 100vh;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(120deg, #a1c4fd, #c2e9fb);
+      overflow: hidden;
+      position: relative;
     }
 
-    .res {
+    /* Background waves */
+    body::before {
+      content: "";
+      position: absolute;
+      top: -100px;
+      left: -100px;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(255,255,255,0.1) 1%, transparent 60%);
+      animation: rotate 20s linear infinite;
+      z-index: 0;
+    }
+
+    @keyframes rotate {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .login-container {
+      min-height: 100vh;
       display: flex;
       justify-content: center;
       align-items: center;
-      min-height: 100vh;
-      background: linear-gradient(to right top,rgb(242, 244, 239));
+      position: relative;
+      z-index: 1;
     }
 
     .glass-card {
-      background: rgba(255, 255, 255, 0.25);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
+      background: rgba(255, 255, 255, 0.15);
+      border: 1px solid rgba(255, 255, 255, 0.3);
       border-radius: 20px;
-      box-shadow: 0 8px 32px rgba(31, 38, 135, 0.2);
-      padding: 30px;
-      max-width: 400px;
+      padding: 40px;
+      max-width: 420px;
       width: 100%;
-      border: 1px solid rgba(255, 255, 255, 0.2);
+      min-height: 480px;
+      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      transition: all 0.3s ease;
+      animation: fadeIn 1s ease-in-out;
     }
 
-    h2 {
+    .glass-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 16px 32px rgba(0, 0, 0, 0.25);
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .glass-card img {
+      width: 60px;
+      display: block;
+      margin: 0 auto 10px;
+    }
+
+    .glass-card h2 {
+      color: #005f73;
+      font-weight: 700;
       text-align: center;
-      font-weight: bold;
-      color: #003366;
       margin-bottom: 30px;
+      letter-spacing: 1px;
     }
 
     .form-control {
-      border-radius: 12px;
-      border: none;
-      padding: 10px 15px;
-      background-color: white;
-      transition: box-shadow 0.3s ease;
+      border-radius: 10px;
+      padding: 12px 15px;
+      border: 1px solid #b2ebf2;
+      transition: all 0.3s ease;
+      background-color: rgba(255, 255, 255, 0.7);
+    }
+
+    .form-control:hover {
+      background-color: #e0f7fa;
     }
 
     .form-control:focus {
-      box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
-      border: 1px solid #0d6efd;
+      border-color: #007BA7;
+      box-shadow: 0 0 0 0.2rem rgba(0, 123, 167, 0.25);
     }
 
     .btn-primary {
-      border-radius: 12px;
-      padding: 10px 30px;
-      font-weight: 600;
-      background-color: #0d6efd;
+      background-color: #007BA7;
       border: none;
+      border-radius: 10px;
+      font-weight: 600;
+      padding: 12px;
+      transition: all 0.3s ease;
     }
 
     .btn-primary:hover {
-      background-color: #0b5ed7;
+      background-color: #0094B4;
+      box-shadow: 0 0 10px rgba(0, 123, 167, 0.4);
+      transform: scale(1.02);
+    }
+
+    .form-check-label,
+    .small {
+      color: #005f73;
     }
 
     #msg {
+      color: red;
+      font-weight: 500;
       text-align: center;
-      color: #dc3545;
       margin-top: 15px;
     }
 
-    @media (max-width: 768px) {
+    @media (max-width: 576px) {
       .glass-card {
-        padding: 25px;
+        padding: 30px;
+        min-height: 450px;
+        max-width: 90%;
       }
     }
   </style>
 </head>
 <body>
   <%- include('header.ejs') %>
-  <div class="res">
+
+  <div class="login-container">
     <div class="glass-card">
-      <h2>Hospital Login</h2>
-      <form id="loginForm" method="POST" action="/login">
+      <img src="/images/hospital_0.jpg" alt="Hospital Logo" />
+      <h2>Welcome Back</h2>
+      <form method="POST" action="/login">
         <div class="mb-3">
-          <label for="email" class="form-label visually-hidden">Email</label>
-          <input type="email" class="form-control" id="email" placeholder="Email" name="email" required autofocus />
+          <input type="email" class="form-control" name="email" placeholder="Email" required autofocus />
         </div>
         <div class="mb-3">
-          <label for="password" class="form-label visually-hidden">Password</label>
-          <input type="password" class="form-control" id="password" placeholder="Password" name="password" required />
+          <input type="password" class="form-control" name="password" placeholder="Password" required />
         </div>
 
-        <!-- Remember Me & Forgot Password -->
         <div class="d-flex justify-content-between align-items-center mb-3">
           <div class="form-check">
             <input type="checkbox" class="form-check-input" id="rememberMe" name="rememberMe">
             <label class="form-check-label" for="rememberMe">Remember Me</label>
           </div>
-          <a href="/forgot-password" class="text-decoration-none small">Forgot Password?</a>
+          <a href="/forgot-password" class="small text-decoration-none">Forgot Password?</a>
         </div>
 
-        
-
-        <div class="d-grid mt-3">
+        <div class="d-grid">
           <button type="submit" class="btn btn-primary">Login</button>
         </div>
+
         <p id="msg"><%= typeof message !== 'undefined' ? message : '' %></p>
       </form>
     </div>
   </div>
 
-  <!-- Optional JS (if needed) -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="../public/js/login.js"></script>
 </body>
 </html>

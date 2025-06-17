@@ -1,79 +1,123 @@
+// authController.js
 const bcrypt = require("bcrypt");
 const userModel = require("../models/userModel");
-const roleModel = require('../models/roleModel');
+const db = require('../config/db');
 
-exports.register = async (req, res) => {
-  const { name, email, password, role } = req.body;
-
-
-  userModel.findUserByUsername(email, (err, existingUser) => {
-    if (err) {
-      return res.render("register", { message: "Server error. Try again." });
-    }
-
-    if (existingUser) {
-      return res.render("register", { message: "Email already registered!" });
-    }
-
-  userModel.createUser(name, email, password, role, (err, userId) => {
-    if (err) return res.status(500).send('Error creating user');
-
-    switch (role) {
-      case 'admin':
-        roleModel.saveAdmin(req.body.admin_contact, userId, afterSave);
-        break;
-      case 'doctor':
-        roleModel.saveDoctor(name, req.body.doctor_specialization, req.body.doctor_contact, req.body.doctor_experience,req.body.age,req.body.gender, userId, 1, afterSave); // hardcoded admin_id = 1
-        break;
-      case 'RECEPTIONIST':
-        roleModel.saveReception(name, req.body.reception_contact, userId, 1, afterSave); // hardcoded admin_id = 1
-        break;
-      default:
-        res.status(400).send('Invalid role');
-    }
-
-    function afterSave(err2) {
-      if (err2) return res.status(500).send('Role-specific data insert error');
-      res.redirect('/register'); // or send success message
-    }
-  });
-});
+// Render login page
+exports.getloginpage = (req, res) => {
+  res.render("login");
 };
 
-
+// Handle login
 exports.login = (req, res) => {
   const { email, password } = req.body;
 
   userModel.findUserByUsername(email, async (err, user) => {
-    if (err) throw err;
+    console.log(user);
+    if (err) {
+      console.error(err);
+      return res.render('login', { message: 'Internal server error' });
+    }
 
     if (!user) {
-      return res.render('login', { message: 'Invalid email or password.' });
+      return res.render('login', { message: 'User not found' });
     }
-    
-    if (!(password==user.password)) {
-      return res.render('login', { message: 'Incorrect password.' });
+    console.log(user.role);
+    const match = await bcrypt.compare(password, user.password);
+    console.log(match);
+    if (match) {
+      return res.render('login', { message: 'Invalid email or password' });
     }
 
-    req.session.user = { id: user.user_id, role: user.role };
+    // Set session
+    req.session.user = {
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      role: user.role
+    };
+
     // Redirect based on role
-    switch (user.role) {
-      case 'ADMIN':
-        return res.redirect('/Admindashboard');
-      case 'DOCTOR':
-        return res.redirect('/Docterdashboard');
-      case 'RECEPTIONIST':
-        return res.redirect('/Receptiondashboard');
-      default:
-        return res.render('login', { message: 'Unknown role.' });
+    if (user.role === 'ADMIN') {
+      res.redirect('/Admindashboard');
+    } else if (user.role === 'DOCTOR') {
+      res.redirect('/doctordashboard');
+    } else if (user.role === 'RECEPTIONIST') {
+      res.redirect('/receptiondashboard');
+    } else {
+      res.render('login', { message: 'Invalid user role' });
     }
   });
 };
 
+// Render registration form
+exports.getregisterpage = (req, res) => {
+  res.render('register');
+};
 
+// Handle user registration
+exports.registerUser = (req, res) => {
+  // Ensure the user is logged in and is an admin
+  if (!req.session.user || !req.session.user.id || req.session.user.role !== 'ADMIN') {
+    return res.status(401).send('Unauthorized: Admin not logged in.');
+  }
 
+  const { name, email, contact, password, role, specialization, experience } = req.body;
+  const adminId = req.session.user.id;
 
+  // Save user
+  userModel.createUser({ name, email, contact, password, role }, (err, userId) => {
+    if (err) {
+      console.error(err);
+      return res.status(500).send('Error creating user.');
+    }
 
+    if (role === 'doctor') {
+      userModel.createDoctor({ name, contact, specialization, experience, userId, adminId }, (err) => {
+        if (err) {
+          console.error(err);
+          return res.status(500).send('Error creating doctor.');
+        }
+        res.redirect('/Admindashboard');
+      });
+    } else if (role === 'receptionist') {
+      userModel.createReceptionist({ name, contact, userId, adminId }, (err) => {
+        if (err) {
+          console.error(err);
+          return res.status(500).send('Error creating receptionist.');
+        }
+        res.redirect('/Admindashboard');
+      });
+    } else {
+      res.status(400).send('Invalid role.');
+    }
+  });
+};
+
+// Logout
+exports.logout = (req, res) => {
+  req.session.destroy(err => {
+    if (err) {
+      console.error("Logout error:", err);
+      return res.status(500).send("Error logging out");
+    }
+    res.redirect("/login");
+  });
+};
+
+function commitTransaction(conn, userId, callback) {
+  conn.commit(err => {
+    if (err) {
+      return conn.rollback(() => {
+        conn.release();
+        return callback(err);
+      });
+    }
+
+    conn.release();
+    return callback(null, userId);
+  });
+}
 
 
 
@@ -137,6 +181,8 @@ exports.viewDoctors = (req, res) => {
       console.error('Error fetching doctors:', err);
       return res.status(500).send('Server Error');
     }
+    console.log(doctors);
+    
     res.render('viewdoctor', { doctors });
   });
 };
@@ -166,8 +212,13 @@ exports.updateDoctor = (req, res) => {
   });
 };
 
+exports.getAddPatient=(req,res)=>{
+  res.render('addPatient.ejs');
+};
 
-
+exports.AddReceptionist=(req,res)=>{
+  res.render('addReceptionist.ejs');
+};
 
 exports.getAdmindashboard=(req,res)=>{
   res.render('Admindashboard.ejs');
@@ -196,7 +247,9 @@ exports.getcontactpage=(req,res)=>{
 };
 
 exports.getregisterpage=(req,res)=>{
-  res.render("register.ejs", { message: null });
+  console.log("register");
+  res.render("register.ejs");
+  
 };
 exports.gethomepage=(req,res)=>{
   res.render("homepage.ejs");

@@ -8,13 +8,18 @@
   <!-- Bootstrap CSS & Icons -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet"/>
 
   <style>
     body {
-      padding-top: 112px; /* total height of top bar + navbar */
+      padding-top: 112px; /* height of top bar + navbar */
+      background-color: #e0f7fa;
+      color: #333;
+      font-family: 'Poppins', sans-serif;
     }
+
     .top-bar {
-      background-color: #f8f9fa;
+      background-color: #007BA7;
       padding: 10px 30px;
       font-size: 14px;
       position: fixed;
@@ -22,12 +27,73 @@
       top: 0;
       z-index: 1040;
       border-bottom: 1px solid #ddd;
+      color: white;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      transition: all 0.3s ease;
     }
+
+    .top-bar .btn {
+      font-weight: 600;
+      transition: background-color 0.3s ease, transform 0.3s ease;
+    }
+
+    .top-bar .btn:hover {
+      background-color: #00acc1;
+      transform: scale(1.05);
+    }
+
+    .contact-info i {
+      margin-right: 5px;
+    }
+
     .navbar {
       position: fixed;
       width: 100%;
-      top: 48px; /* attaches right below top-bar (top-bar height = 48px) */
+      top: 48px;
       z-index: 1030;
+      background-color: #005f73;
+      transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .navbar-brand {
+      font-weight: 700;
+      font-size: 20px;
+      color: #ffffff !important;
+      transition: color 0.3s ease;
+    }
+
+    .navbar-brand:hover {
+      color: #b2ebf2 !important;
+    }
+
+    .nav-link {
+      color: #ffffff;
+      padding: 8px 15px;
+      border-radius: 8px;
+      transition: all 0.3s ease;
+    }
+
+    .nav-link:hover {
+      background-color: #007BA7;
+      color: #e0f7fa;
+      box-shadow: 0 4px 10px rgba(0,123,167,0.2);
+      transform: translateY(-2px);
+    }
+
+    .navbar-toggler {
+      border-color: #ffffff;
+    }
+
+    .navbar-toggler:focus {
+      box-shadow: none;
+    }
+
+    @media (max-width: 768px) {
+      .contact-info {
+        flex-direction: column;
+        gap: 5px;
+        font-size: 12px;
+      }
     }
   </style>
 </head>
@@ -35,8 +101,8 @@
 
   <!-- Top Bar -->
   <div class="top-bar d-flex justify-content-between align-items-center">
-    <button class="btn btn-primary btn-sm">FIND A DOCTOR</button>
-    <div class="contact-info d-flex gap-4 text-dark fw-bold">
+    <button class="btn btn-light btn-sm">FIND A DOCTOR</button>
+    <div class="contact-info d-flex gap-4 fw-bold flex-wrap text-white">
       <div><i class="bi bi-phone"></i> 24 HOUR SERVICE</div>
       <div><i class="bi bi-telephone-fill"></i> For Emergency: 020 66096000</div>
       <div><i class="bi bi-telephone-fill"></i> For Appointment: +91 9730559600</div>
@@ -44,9 +110,9 @@
   </div>
 
   <!-- Navbar -->
-  <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-    <div class="container-fluid">
-      <a class="navbar-brand" href="#">HospitalSys</a>
+  <nav class="navbar navbar-expand-lg navbar-dark shadow-sm">
+    <div class="container-fluid px-4">
+      <a class="navbar-brand" href="#">WellSpring Hospital</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
         <span class="navbar-toggler-icon"></span>
       </button>

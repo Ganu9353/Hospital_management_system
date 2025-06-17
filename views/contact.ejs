@@ -1,65 +1,115 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Contact Form #01</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-  <style>
-    body {
-      background: #f8f9fa;
-    }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Contact Form - WellSpring Hospital</title>
 
+  <!-- Bootstrap & AOS CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet"/>
+
+  <!-- Font Awesome -->
+  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+
+  <style>
+    body, html {
+      height: 100%;
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(120deg, #a1c4fd, #c2e9fb);
+    }
     .contact-container {
-      background: #fff;
+      background: #ffffff;
       border-radius: 10px;
       overflow: hidden;
-      box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
       margin-top: 50px;
+      transition: all 0.3s ease;
+    }
+
+    .contact-container:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
     }
 
     .contact-info1 {
-      background: #0048ff;
-      color: #fff;
+      background: #005f73;
+      color: #ffffff;
       padding: 30px;
     }
 
-    .contact-info h4 {
+    .contact-info1 h4 {
       margin-bottom: 30px;
     }
 
     .info-item {
       display: flex;
-      align-items: start;
+      align-items: flex-start;
       margin-bottom: 20px;
+      transition: transform 0.3s ease;
+    }
+
+    .info-item:hover {
+      transform: translateX(5px);
     }
 
     .info-item i {
       font-size: 20px;
       margin-right: 15px;
       margin-top: 2px;
+      color: #b2ebf2;
+      transition: color 0.3s ease;
+    }
+
+    .info-item:hover i {
+      color: #ffffff;
     }
 
     .form-control {
-      border-radius: 0;
+      border-radius: 5px;
+      border: 1px solid #b2ebf2;
+      transition: all 0.3s ease;
+    }
+
+    .form-control:focus {
+      border-color: #007BA7;
+      box-shadow: 0 0 8px rgba(0, 123, 167, 0.2);
     }
 
     .btn-primary {
+      background-color: #007BA7;
+      border-color: #007BA7;
       border-radius: 4px;
       padding: 10px 20px;
+      transition: all 0.3s ease;
+    }
+
+    .btn-primary:hover {
+      background-color: #0094B4;
+      border-color: #0081A0;
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(0, 123, 167, 0.3);
+    }
+
+    h3, h4 {
+      color: #005f73;
     }
   </style>
-  <!-- Font Awesome for icons -->
-  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 </head>
 <body>
+
+  <!-- Header Include -->
   <%- include('header.ejs') %>
+
+  <!-- Contact Section -->
   <div class="container">
-    <h3 class="text-center mt-5 mb-4">Contact Form</h3>
-    <div class="row contact-container">
+    <h3 class="text-center mt-5 mb-4" data-aos="fade-down">Contact Form</h3>
+    <div class="row contact-container" data-aos="zoom-in">
+      
       <!-- Contact Form -->
       <div class="col-md-7 p-4">
-        <h4 class="mb-4">Get in touch</h4>
+        <h4 class="mb-4">Get in Touch</h4>
         <form>
           <div class="row mb-3">
             <div class="col">
@@ -81,17 +131,17 @@
 
       <!-- Contact Info -->
       <div class="col-md-5 contact-info1">
-        <h4>Contact us</h4>
+        <h4>Contact Us</h4>
         <div class="info-item">
           <i class="fas fa-map-marker-alt"></i>
           <div>
             <strong>Address:</strong><br>
-            198 West 21th Street, Suite 721 New York NY 10016
+            198 West 21th Street, Suite 721<br>New York NY 10016
           </div>
         </div>
         <div class="info-item">
           <i class="fas fa-phone"></i>
-          <div><strong>Phone:</strong> + 1235 2355 98</div>
+          <div><strong>Phone:</strong> +1235 2355 98</div>
         </div>
         <div class="info-item">
           <i class="fas fa-paper-plane"></i>
@@ -105,6 +155,11 @@
     </div>
   </div>
 
+  <!-- Scripts -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <script>
+    AOS.init();
+  </script>
 </body>
 </html>

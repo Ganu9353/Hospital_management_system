@@ -1,48 +1,117 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Admin Dashboard - Hospital Management Dashboard</title>
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-    />
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css"
-      rel="stylesheet"
-    />
-    <link rel="stylesheet" href="/css/style.css" />
-  </head>
-  <body>
-    <%- include('header1') %> <%- include('Adminsidebar') %>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Dashboard - Hospital Management</title>
 
-    <div class="content" style="margin-left: 250px; padding: 20px; margin-top: 100px;">
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <!-- Bootstrap Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet" />
+  <link rel="stylesheet" href="/css/style.css" />
+
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      margin: 0;
+      background: linear-gradient(120deg, #a1c4fd, #c2e9fb);
+    }
+
+    .content {
+      margin-left: 250px;
+      padding: 20px;
+      /* margin-top: 100px; */
+    }
+
+    h1 {
+      font-weight: bold;
+      color: #005f73;
+    }
+
+    .card {
+      border: none;
+      border-radius: 16px;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      cursor: pointer;
+      background-color: #ffffff;
+      border: 1px solid #b2ebf2;
+    }
+
+    .card:hover {
+      transform: translateY(-8px) scale(1.02);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    .card-title {
+      font-weight: 600;
+      color: #007BA7;
+    }
+
+    .card-text {
+      font-size: 1.2rem;
+      font-weight: bold;
+      color: #005f73;
+    }
+
+    @media (max-width: 768px) {
+      .content {
+        margin-left: 0;
+        margin-top: 120px;
+      }
+    }
+
+    /* Optional: Style the included header/sidebar */
+    header {
+      background-color: #005f73;
+      color: white;
+    }
+
+    header a {
+      color: white;
+      transition: color 0.3s ease;
+    }
+
+    header a:hover {
+      color: #b2ebf2;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header and Sidebar -->
+  <%- include('header1') %>
+  <%- include('Adminsidebar') %>
+
+  <!-- Main Content -->
+  <div class="content">
     <h1>Welcome to the Hospital Admin Dashboard</h1>
-    <p>This area can be used to show dashboard cards, stats, charts, recent activity, etc.</p>
+    <p class="text-muted">Monitor key metrics and manage hospital operations efficiently.</p>
 
-    <!-- Example card layout -->
+    <!-- Dashboard Cards -->
     <div class="row mt-4">
-      <div class="col-md-4">
-        <div class="card text-bg-primary mb-3">
+      <div class="col-md-4 mb-4">
+        <div class="card">
           <div class="card-body">
-            <h5 class="card-title">Total Patients</h5>
+            <h5 class="card-title"><i class="bi bi-people-fill me-2"></i>Total Patients</h5>
             <p class="card-text">124</p>
           </div>
         </div>
       </div>
-      <div class="col-md-4">
-        <div class="card text-bg-success mb-3">
+
+      <div class="col-md-4 mb-4">
+        <div class="card">
           <div class="card-body">
-            <h5 class="card-title">Doctors Available</h5>
+            <h5 class="card-title"><i class="bi bi-person-badge-fill me-2"></i>Doctors Available</h5>
             <p class="card-text">15</p>
           </div>
         </div>
       </div>
-      <div class="col-md-4">
-        <div class="card text-bg-warning mb-3">
+
+      <div class="col-md-4 mb-4">
+        <div class="card">
           <div class="card-body">
-            <h5 class="card-title">Rooms Occupied</h5>
+            <h5 class="card-title"><i class="bi bi-hospital-fill me-2"></i>Rooms Occupied</h5>
             <p class="card-text">32</p>
           </div>
         </div>
@@ -50,6 +119,7 @@
     </div>
   </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-  </body>
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
 </html>
