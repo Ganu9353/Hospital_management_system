@@ -27,3 +27,239 @@ exports.createReceptionist = (data, callback) => {
   const sql = `INSERT INTO reception (reception_name, reception_contact, user_id, admin_id, status) VALUES (?, ?, ?, ?, 'active')`;
   db.query(sql, [data.name, data.contact, data.userId, data.adminId], callback);
 };
+
+exports.getAllDoctors = (callback) => {
+  const sql = `
+    SELECT 
+      d.doctor_id,
+      d.doctor_name AS name,
+      d.doctor_specialization AS specialization,
+      d.doctor_contact AS contact,
+      d.doctor_experience AS experience,
+      d.status
+    FROM doctor d
+  `;
+  db.query(sql, (err, results) => {
+    if (err) return callback(err);
+    callback(null, results);
+  });
+};
+
+
+exports.deleteDoctor = (doctorId, callback) => {
+  // Step 1: Find user_id linked to this doctor
+  const getUserIdSql = 'SELECT user_id FROM doctor WHERE doctor_id = ?';
+  
+  db.query(getUserIdSql, [doctorId], (err, results) => {
+    if (err) return callback(err);
+    if (results.length === 0) return callback(new Error('Doctor not found'));
+
+    const userId = results[0].user_id;
+
+    // Step 2: Delete doctor
+    const deleteDoctorSql = 'DELETE FROM doctor WHERE doctor_id = ?';
+    db.query(deleteDoctorSql, [doctorId], (err) => {
+      if (err) return callback(err);
+
+      // Step 3: Delete user
+      const deleteUserSql = 'DELETE FROM users WHERE user_id = ?';
+      db.query(deleteUserSql, [userId], (err) => {
+        if (err) return callback(err);
+        callback(null);
+      });
+    });
+  });
+};
+
+exports.getDoctorById = (doctorId, callback) => {
+  const sql = `
+    SELECT 
+      d.*, 
+      u.username 
+    FROM 
+      doctor d 
+    JOIN 
+      users u 
+    ON 
+      d.user_id = u.user_id 
+    WHERE 
+      d.doctor_id = ?
+  `;
+
+  db.query(sql, [doctorId], (err, results) => {
+    if (err) return callback(err);
+    callback(null, results);
+  });
+};
+
+exports.updateDoctor = async (data, callback) => {
+  
+  try {
+    // 1. Update users table
+    let updateUserSQL;
+    const params = [data.username];
+
+    if (data.password && data.password.trim() !== '') {
+     
+      updateUserSQL = `UPDATE users SET username = ?, password = ? WHERE user_id = ?`;
+    } else {
+      updateUserSQL = `UPDATE users SET username = ? WHERE user_id = ?`;
+    }
+    params.push(data.user_id);
+
+    db.query(updateUserSQL, params);
+
+    // 2. Update doctor table
+    const updateDoctorSQL = `
+      UPDATE doctor SET 
+        doctor_name = ?, 
+        doctor_specialization = ?, 
+        doctor_contact = ?, 
+        doctor_experience = ?, 
+        status = ?
+      WHERE doctor_id = ?
+    `;
+    db.query(updateDoctorSQL, [
+      data.doctor_name,
+      data.specialization,
+      data.contact,
+      data.experience,
+      data.status,
+      data.doctor_id
+    ]);
+    callback(null);
+  } catch (err) {
+    callback(err);
+  }
+};
+
+exports.getAllReceptions = (callback) => {
+  db.query(`
+    SELECT 
+      r.reception_id,
+      r.reception_name,
+      r.reception_contact,
+      r.status,
+      u.username,
+      u.role
+    FROM 
+      reception r
+    JOIN 
+      users u ON r.user_id = u.user_id
+  `, (err, results) => {
+    if (err) {
+      return callback(err, null);
+    }
+    callback(null, results);
+  });
+};
+
+
+// Get receptionist by ID
+exports.getReceptionById = (id, callback) => {
+  const sql = 'SELECT * FROM reception WHERE reception_id = ?';
+  db.query(sql, [id], callback);
+};
+
+// Delete from reception
+exports.deleteReceptionById = (id, callback) => {
+  const sql = 'DELETE FROM reception WHERE reception_id = ?';
+  db.query(sql, [id], callback);
+};
+
+// Delete user from users table
+exports.deleteUserById = (userId, callback) => {
+  const sql = 'DELETE FROM users WHERE user_id = ?';
+  db.query(sql, [userId], callback);
+};
+
+exports.getReceptionById = (id, callback) => {
+  const sql = 'SELECT * FROM reception WHERE reception_id = ?';
+  db.query(sql, [id], (err, results) => {
+    if (err) return callback(err);
+    callback(null, results);
+  });
+};
+
+exports.getReceptionById = (id, callback) => {
+  const sql = `
+    SELECT r.*, u.username 
+    FROM reception r 
+    JOIN users u ON r.user_id = u.user_id 
+    WHERE r.reception_id = ?`;
+  db.query(sql, [id], callback);
+};
+
+// Update reception and user data
+exports.updateReception = async (data, callback) => {
+  try {
+    const receptionSql = `
+      UPDATE reception 
+      SET reception_name = ?, reception_contact = ?, status = ?
+      WHERE reception_id = ?`;
+    const receptionValues = [
+      data.reception_name,
+      data.reception_contact,
+      data.status,
+      data.reception_id
+    ];
+
+    // Get user_id from reception
+    db.query('SELECT user_id FROM reception WHERE reception_id = ?', [data.reception_id], async (err, results) => {
+      if (err) return callback(err);
+      if (results.length === 0) return callback(new Error('Reception not found'));
+
+      const user_id = results[0].user_id;
+
+      let userSql, userValues;
+
+      if (data.password && data.password.trim() !== "") {
+        const hashedPassword = await bcrypt.hash(data.password, 10);
+        userSql = `UPDATE users SET username = ?, password = ? WHERE user_id = ?`;
+        userValues = [data.username, hashedPassword, user_id];
+      } else {
+        userSql = `UPDATE users SET username = ? WHERE user_id = ?`;
+        userValues = [data.username, user_id];
+      }
+
+      db.query(receptionSql, receptionValues, (err) => {
+        if (err) return callback(err);
+        db.query(userSql, userValues, callback);
+      });
+    });
+  } catch (error) {
+    callback(error);
+  }
+};
+
+
+// -----------------reception dashboard-------------
+
+exports.saveRoom = async ({ room_no, room_type, room_status, charges_per_day }) => {
+  
+  const query = `
+    INSERT INTO room (room_no, room_type, room_status, charges_per_day)
+    VALUES (?, ?, ?, ?)
+  `;
+  const result = db.execute(query, [room_no, room_type, room_status, charges_per_day]);
+console.log(result);
+  return result;
+};
+
+exports.getAllRooms = (callback) => {
+  const query = "SELECT * FROM room";
+  db.query(query, (err, results) => {
+    if (err) return callback(err);
+    callback(null, results);
+  });
+};
+
+exports.saveNurse = (nurse, callback) => {
+  const sql = 'INSERT INTO nurse (nurse_name, nurse_contact, nurse_shift) VALUES (?, ?, ?)';
+  db.query(sql, [nurse.name, nurse.contact, nurse.shift], callback);
+};
+
+exports.getAllNurses = (callback) => {
+  const sql = 'SELECT * FROM nurse';
+  db.query(sql, callback);
+};

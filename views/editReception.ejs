@@ -59,6 +59,16 @@
         </div>
 
         <div class="mb-3">
+          <label class="form-label">Username</label>
+          <input type="text" class="form-control" name="username" value="<%= doctor.username %>" required>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Password (leave blank to keep unchanged)</label>
+          <input type="password" class="form-control" name="password" placeholder="New password (optional)">
+        </div>
+
+        <div class="mb-3">
           <label class="form-label">Reception Contact</label>
           <input type="text" class="form-control" name="reception_contact" value="<%= reception.reception_contact %>" required />
         </div>

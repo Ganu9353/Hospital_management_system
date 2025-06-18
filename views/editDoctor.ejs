@@ -61,12 +61,23 @@
     <h1>Edit Doctor Details</h1>
 
     <div class="glass-card">
-      <form id="editDoctorForm" method="POST" action="/update-doctor">
+      <form id="editDoctorForm" method="POST" action="/updatedocter">
         <input type="hidden" name="doctor_id" value="<%= doctor.doctor_id %>">
+        <input type="hidden" name="user_id" value="<%= doctor.user_id %>">
 
         <div class="mb-3">
           <label class="form-label">Doctor Name</label>
-          <input type="text" class="form-control" name="name" value="<%= doctor.name %>" required pattern="[A-Za-z\s]+" title="Only letters and spaces allowed">
+          <input type="text" class="form-control" name="doctor_name" value="<%= doctor.doctor_name %>" required pattern="[A-Za-z\s]+" title="Only letters and spaces allowed">
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Username</label>
+          <input type="text" class="form-control" name="username" value="<%= doctor.username %>" required>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Password (leave blank to keep unchanged)</label>
+          <input type="password" class="form-control" name="password" placeholder="New password (optional)">
         </div>
 
         <div class="mb-3">
@@ -75,19 +86,19 @@
             <option disabled>Select specialization</option>
             <% const specializations = ['Cardiologist','Neurologist','Pediatrician','Orthopedic','Dermatologist','General Practitioner','ENT Specialist','Gynecologist','Psychiatrist','Surgeon']; %>
             <% specializations.forEach(s => { %>
-              <option value="<%= s %>" <%= doctor.specialization === s ? 'selected' : '' %>><%= s %></option>
+              <option value="<%= s %>" <%= doctor.doctor_specialization === s ? 'selected' : '' %>><%= s %></option>
             <% }) %>
           </select>
         </div>
 
         <div class="mb-3">
           <label class="form-label">Phone</label>
-          <input type="tel" class="form-control" name="contact" value="<%= doctor.contact %>" required pattern="\d{10}" title="Enter a 10-digit number">
+          <input type="tel" class="form-control" name="contact" value="<%= doctor.doctor_contact %>" required pattern="\d{10}" title="Enter a 10-digit number">
         </div>
 
         <div class="mb-3">
           <label class="form-label">Experience (Years)</label>
-          <input type="number" class="form-control" name="experience" value="<%= doctor.experience %>" min="0" required>
+          <input type="number" class="form-control" name="experience" value="<%= doctor.doctor_experience %>" min="0" required>
         </div>
 
         <div class="mb-3">
