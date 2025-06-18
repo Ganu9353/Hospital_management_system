@@ -263,3 +263,37 @@ exports.getAllNurses = (callback) => {
   const sql = 'SELECT * FROM nurse';
   db.query(sql, callback);
 };
+
+exports.getRoomById = (id, callback) => {
+  db.query('SELECT * FROM room WHERE room_no = ?', [id], callback);
+};
+
+exports.updateRoom = (roomData, callback) => {
+  const { room_no, room_type, room_status, charges_per_day } = roomData;
+  db.query(
+    'UPDATE room SET room_type = ?, room_status = ?, charges_per_day = ? WHERE room_no = ?',
+    [room_type, room_status, charges_per_day, room_no],
+    callback
+  );
+};
+
+exports.deleteRoom = (id, callback) => {
+  db.query('DELETE FROM room WHERE room_no = ?', [id], callback);
+};
+
+exports.getNurseById = (id, callback) => {
+  db.query('SELECT * FROM nurse WHERE nurse_id = ?', [id], callback);
+};
+
+exports.updateNurse = (nurseData, callback) => {
+  const { nurse_id, nurse_name, nurse_contact, nurse_shift } = nurseData;
+  db.query(
+    'UPDATE nurse SET nurse_name = ?, nurse_contact = ?, nurse_shift = ? WHERE nurse_id = ?',
+    [nurse_name, nurse_contact, nurse_shift, nurse_id],
+    callback
+  );
+};
+
+exports.deleteNurse = (id, callback) => {
+  db.query('DELETE FROM nurse WHERE nurse_id = ?', [id], callback);
+};

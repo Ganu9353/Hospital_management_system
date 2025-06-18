@@ -82,14 +82,11 @@
                   <td><%= room.room_status %></td>
                   <td><%= room.charges_per_day %></td>
                   <td class="action-btns">
-                    <a href="/rooms/edit/<%= room.room_no %>" class="btn btn-sm btn-warning">
+                    <a href="/rooms/edit?id=<%= room.room_no %>" class="btn btn-sm btn-warning">
                       <i class="bi bi-pencil-square"></i> Edit
                     </a>
-                    <form action="/rooms/delete/<%= room.room_no %>" method="POST" style="display:inline;">
-                      <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure you want to delete this room?');">
-                        <i class="bi bi-trash"></i> Delete
-                      </button>
-                    </form>
+                    <a href="/rooms/delete?id=<%= room.room_no %>" class="btn btn-sm btn-danger">
+                      <i class="bi bi-trash"></i> Delete</a>
                   </td>
                 </tr>
               <% }) %>

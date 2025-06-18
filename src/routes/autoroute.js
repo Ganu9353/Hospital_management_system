@@ -48,4 +48,13 @@ router.get('/room/list',isAuthenticated,isReceptionist, authController.showRooml
 router.get('/nurse/add',isAuthenticated,isReceptionist, authController.getAddNursePage);
 router.post('/save-nurse',isAuthenticated,isReceptionist, authController.saveNurse);
 router.get('/nurse/list',isAuthenticated,isReceptionist, authController.viewNurses);
+router.get('/medicine/add',isAuthenticated,isReceptionist, authController.addmedicine);
+
+router.get('/rooms/edit',isAuthenticated,isReceptionist, authController.editRoomForm);
+router.post('/room/update',isAuthenticated,isReceptionist, authController.updateRoom);
+router.get('/rooms/delete',isAuthenticated,isReceptionist, authController.deleteRoom);
+
+router.get('/nurses/edit', authController.editNurseForm);
+router.post('/nurse/update', authController.updateNurse);
+router.get('/nurses/delete', authController.deleteNurse);
 module.exports = router;

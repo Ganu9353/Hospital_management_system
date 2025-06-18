@@ -143,7 +143,6 @@
         <ul class="nav flex-column">
           <li class="nav-item"><a class="nav-link" href="/room/add">Add Room</a></li>
           <li class="nav-item"><a class="nav-link" href="/room/list">View Rooms</a></li>
-          <li class="nav-item"><a class="nav-link" href="/room/edit">Edit Room</a></li>
         </ul>
       </div>
     </li>
@@ -165,7 +164,6 @@
         <ul class="nav flex-column">
           <li class="nav-item"><a class="nav-link" href="/patient/add">Add Patient</a></li>
           <li class="nav-item"><a class="nav-link" href="/patient/list">View Patients</a></li>
-          <li class="nav-item"><a class="nav-link" href="/patient/edit">Edit Patient</a></li>
           <li class="nav-item"><a class="nav-link" href="/patient/discharge">Discharge Patient</a></li>
         </ul>
       </div>
@@ -188,11 +186,30 @@
         <ul class="nav flex-column">
           <li class="nav-item"><a class="nav-link" href="/nurse/add">Add Nurse</a></li>
           <li class="nav-item"><a class="nav-link" href="/nurse/list">View Nurses</a></li>
-          <li class="nav-item"><a class="nav-link" href="/nurse/edit">Edit Nurse</a></li>
         </ul>
       </div>
     </li>
 
+    <!-- Medicine -->
+<li class="nav-item" role="none">
+  <a 
+    class="nav-link d-flex justify-content-between align-items-center"
+    data-bs-toggle="collapse"
+    href="#medicineMenu"
+    role="button"
+    aria-expanded="false"
+    aria-controls="medicineMenu"
+  >
+    <span><i class="bi bi-capsule-pill"></i> Medicine</span>
+    <i class="bi bi-chevron-down small"></i>
+  </a>
+  <div class="collapse" id="medicineMenu" data-bs-parent="#sidebarAccordion">
+    <ul class="nav flex-column">
+      <li class="nav-item"><a class="nav-link" href="/medicine/add">Add Medicine</a></li>
+      <li class="nav-item"><a class="nav-link" href="/medicine/list">View Medicine</a></li>
+    </ul>
+  </div>
+</li>
     <!-- Billing -->
     <li class="nav-item" role="none">
       <a 
@@ -211,29 +228,6 @@
           <li class="nav-item"><a class="nav-link" href="/billing/generate">Generate Bill</a></li>
           <li class="nav-item"><a class="nav-link" href="/billing/list">View Bills</a></li>
           <li class="nav-item"><a class="nav-link" href="/billing/edit">Edit Bill</a></li>
-        </ul>
-      </div>
-    </li>
-
-    <!-- Appointment -->
-    <li class="nav-item" role="none">
-      <a 
-        class="nav-link d-flex justify-content-between align-items-center"
-        data-bs-toggle="collapse"
-        href="#appointmentMenu"
-        role="button"
-        aria-expanded="false"
-        aria-controls="appointmentMenu"
-      >
-        <span><i class="bi bi-calendar-check-fill"></i>Appointment</span>
-        <i class="bi bi-chevron-down small"></i>
-      </a>
-      <div class="collapse" id="appointmentMenu" data-bs-parent="#sidebarAccordion">
-        <ul class="nav flex-column">
-          <li class="nav-item"><a class="nav-link" href="/appointment/add">Add Appointment</a></li>
-          <li class="nav-item"><a class="nav-link" href="/appointment/list">View Appointments</a></li>
-          <li class="nav-item"><a class="nav-link" href="/appointment/edit">Edit Appointment</a></li>
-          <li class="nav-item"><a class="nav-link" href="/appointment/cancel">Cancel Appointment</a></li>
         </ul>
       </div>
     </li>

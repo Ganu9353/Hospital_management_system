@@ -273,3 +273,58 @@ exports.viewNurses = (req, res) => {
     res.render('viewnurse', { nurses: results });
   });
 };
+
+exports.addmedicine=(req,res)=>res.render("addMedicine.ejs");
+
+// Edit form view
+exports.editRoomForm = (req, res) => {
+  const id = req.query.id;
+  userModel.getRoomById(id, (err, result) => {
+    if (err) return res.status(500).send("Error fetching room");
+    res.render('editRoom', { room: result[0] });
+  });
+};
+
+// Handle update
+exports.updateRoom = (req, res) => {
+  const roomData = req.body;
+  userModel.updateRoom(roomData, (err) => {
+    if (err) return res.status(500).send("Error updating room");
+    res.redirect('/room/list');
+  });
+};
+
+// Delete room
+exports.deleteRoom = (req, res) => {
+  const id = req.query.id;
+  userModel.deleteRoom(id, (err) => {
+    if (err) return res.status(500).send("Error deleting room");
+    res.redirect('/room/list');
+  });
+};
+
+exports.editNurseForm = (req, res) => {
+  const id = req.query.id;
+  userModel.getNurseById(id, (err, result) => {
+    if (err) return res.status(500).send("Error fetching nurse data");
+    res.render('editNurse', { nurse: result[0] });
+  });
+};
+
+// Handle update
+exports.updateNurse = (req, res) => {
+  const nurseData = req.body;
+  userModel.updateNurse(nurseData, (err) => {
+    if (err) return res.status(500).send("Error updating nurse");
+    res.redirect('/nurse/list');
+  });
+};
+
+// Delete nurse
+exports.deleteNurse = (req, res) => {
+  const id = req.query.id;
+  userModel.deleteNurse(id, (err) => {
+    if (err) return res.status(500).send("Error deleting nurse");
+    res.redirect('/nurse/list');
+  });
+};
