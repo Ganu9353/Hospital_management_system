@@ -40,15 +40,16 @@ router.get('/Docterdashboard', isAuthenticated, isDoctor, authController.getDoct
 router.get('/Receptiondashboard', isAuthenticated, isReceptionist, authController.getReceptiondashboard);
 
 // Common authenticated route
-router.get('/patient/add', isAuthenticated,isReceptionist, authController.getAddPatientPage);
-router.get('/patient/add', isAuthenticated,isReceptionist, authController.getAddPatient); // duplicate? keep if needed
+ // duplicate? keep if needed
 router.get('/room/add',isAuthenticated,isReceptionist, authController.getAddroomPage);
 router.post('/save-room',isAuthenticated,isReceptionist, authController.saveRoom);
 router.get('/room/list',isAuthenticated,isReceptionist, authController.showRoomlist);
 router.get('/nurse/add',isAuthenticated,isReceptionist, authController.getAddNursePage);
 router.post('/save-nurse',isAuthenticated,isReceptionist, authController.saveNurse);
 router.get('/nurse/list',isAuthenticated,isReceptionist, authController.viewNurses);
-router.get('/medicine/add',isAuthenticated,isReceptionist, authController.addmedicine);
+router.get('/medicine/add',isAuthenticated,isReceptionist, authController.showAddForm);
+router.post('/medicine/add', authController.saveMedicine);
+router.get('/medicine/list', authController.viewMedicine);
 
 router.get('/rooms/edit',isAuthenticated,isReceptionist, authController.editRoomForm);
 router.post('/room/update',isAuthenticated,isReceptionist, authController.updateRoom);
@@ -57,4 +58,10 @@ router.get('/rooms/delete',isAuthenticated,isReceptionist, authController.delete
 router.get('/nurses/edit', authController.editNurseForm);
 router.post('/nurse/update', authController.updateNurse);
 router.get('/nurses/delete', authController.deleteNurse);
+
+router.get('/patient/add', authController.getAddPatientForm);
+router.post('/patient/add', authController.savePatient);
+
+
+
 module.exports = router;

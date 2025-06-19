@@ -78,6 +78,7 @@ exports.registerUser = (req, res) => {
     }
 
     if (role === 'doctor') {
+      
       userModel.createDoctor({ name, contact, specialization, experience, userId, adminId }, (err) => {
         if (err) return res.status(500).send('Error creating doctor.');
         res.redirect('/Admindashboard');
@@ -326,5 +327,62 @@ exports.deleteNurse = (req, res) => {
   userModel.deleteNurse(id, (err) => {
     if (err) return res.status(500).send("Error deleting nurse");
     res.redirect('/nurse/list');
+  });
+};
+
+exports.showAddForm = (req, res) => {
+  res.render('addMedicine');
+};
+
+exports.saveMedicine = (req, res) => {
+  const { patient_id, medicine_name, price_medicine } = req.body;
+  userModel.addMedicine({ patient_id, medicine_name, price_medicine }, (err) => {
+    if (err) throw err;
+    res.redirect('/medicine/view');
+  });
+};
+
+exports.viewMedicine = (req, res) => {
+  userModel.getAllMedicines((err, results) => {
+    if (err) throw err;
+    res.render('viewMedicine', { medicines: results });
+  });
+};
+
+
+exports.getAddPatientForm = (req, res) => {
+  userModel.getAvailableRooms((err, rooms) => {
+    if (err) return res.status(500).send('Error loading rooms');
+
+    userModel.getAvailableNurses((err, nurses) => {
+      if (err) return res.status(500).send('Error loading nurses');
+
+      userModel.getAllDoctors((err, doctors) => {
+        if (err) return res.status(500).send('Error loading doctors');
+
+        res.render('addPatient', { rooms, nurses, doctors });
+      });
+    });
+  });
+};
+
+exports.savePatient = (req, res) => {
+  const data = {
+    name: req.body.patient_name,
+    age: req.body.patient_age,
+    gender: req.body.patient_gender,
+    contact: req.body.patient_contact,
+    issue: req.body.patient_issue,
+    room_no: req.body.room_no,
+    nurse_id: req.body.nurse_id,
+    doctor_id: req.body.doctor_id
+  };
+
+  userModel.addPatientWithUpdates(data, (err) => {
+    if (err) {
+      console.error("Error adding patient with updates:", err);
+      return res.status(500).send("Failed to add patient.");
+    }
+    res.redirect('/patient/add');
   });
 };

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+   <form method="POST" action="/patients/edit/<%= patient.patient_id %>">
+  <input type="text" name="patient_name" value="<%= patient.patient_name %>" />
+  <input type="number" name="patient_age" value="<%= patient.patient_age %>" />
+  <select name="doctor_id">
+    <% doctors.forEach(d => { %>
+      <option value="<%= d.doctor_id %>" <%= d.doctor_id == patient.doctor_id ? 'selected' : '' %>><%= d.doctor_name %></option>
+    <% }) %>
+  </select>
+  <select name="room_no">
+    <% rooms.forEach(r => { %>
+      <option value="<%= r.room_no %>" <%= r.room_no == patient.room_no ? 'selected' : '' %>><%= r.room_type %> - <%= r.room_no %></option>
+    <% }) %>
+  </select>
+  <select name="nurse_id">
+    <% nurses.forEach(n => { %>
+      <option value="<%= n.nurse_id %>" <%= n.nurse_id == patient.nurse_id ? 'selected' : '' %>><%= n.nurse_name %></option>
+    <% }) %>
+  </select>
+  <button type="submit">Update</button>
+</form>
+
+
+</body>
+</html>

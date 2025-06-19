@@ -297,3 +297,62 @@ exports.updateNurse = (nurseData, callback) => {
 exports.deleteNurse = (id, callback) => {
   db.query('DELETE FROM nurse WHERE nurse_id = ?', [id], callback);
 };
+
+exports.addMedicine = (data, callback) => {
+  const sql = 'INSERT INTO medical (patient_id, medicine_name, price_medicine) VALUES (?, ?, ?)';
+  db.query(sql, [data.patient_id, data.medicine_name, data.price_medicine], callback);
+};
+
+exports.getAllMedicines = (callback) => {
+  const sql = 'SELECT * FROM medical';
+  db.query(sql, callback);
+};
+
+
+// Get available rooms
+exports.getAvailableRooms = (callback) => {
+  db.query("SELECT room_no FROM room WHERE room_status = 'AVAILABLE'", callback);
+};
+
+// Get available nurses (not assigned currently)
+exports.getAvailableNurses = (callback) => {
+  db.query(`
+    SELECT nurse_id, nurse_name FROM nurse
+    WHERE nurse_id NOT IN (SELECT nurse_id FROM patient WHERE status = 'ACTIVE')
+  `, callback);
+};
+
+// Get all doctors
+exports.getAllDoctors = (callback) => {
+  db.query("SELECT doctor_id, doctor_name FROM doctor", callback);
+};
+
+// Save new patient
+exports.addPatientWithUpdates = (data, callback) => {
+  db.beginTransaction(err => {
+    if (err) return callback(err);
+
+    const insertPatientSql = `
+      INSERT INTO patient 
+        (patient_name, patient_age, patient_gender, patient_contact, patient_issue, admitted_date, room_no, nurse_id, doctor_id, status)
+      VALUES (?, ?, ?, ?, ?, CURDATE(), ?, ?, ?, 'ACTIVE')`;
+    const patientValues = [data.name, data.age, data.gender, data.contact, data.issue, data.room_no, data.nurse_id, data.doctor_id];
+
+    db.query(insertPatientSql, patientValues, (err, result) => {
+      if (err) return db.rollback(() => callback(err));
+
+      // 1. Update Room status to OCCUPIED
+      const updateRoomSql = `UPDATE room SET room_status = 'OCCUPIED' WHERE room_no = ?`;
+      db.query(updateRoomSql, [data.room_no], (err) => {
+        if (err) return db.rollback(() => callback(err));
+
+        // 2. Optional: Prevent nurse from being reused (handled by view logic already)
+
+        db.commit(err => {
+          if (err) return db.rollback(() => callback(err));
+          callback(null);
+        });
+      });
+    });
+  });
+};
