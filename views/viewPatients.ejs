@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <table>
+  <tr>
+    <th>Name</th><th>Doctor</th><th>Room</th><th>Status</th><th>Actions</th>
+  </tr>
+  <% patients.forEach(p => { %>
+    <tr>
+      <td><%= p.patient_name %></td>
+      <td><%= p.doctor_name %></td>
+      <td><%= p.room_no %></td>
+      <td><%= p.status %></td>
+      <td>
+        <a href="/patient/edit?id=<%= p.patient_id %>">Edit</a> |
+        <% if (p.status === 'admitted') { %>
+          <a href="/patient/discharge?id=<%= p.patient_id %>">Discharge</a>
+        <% } %>
+      </td>
+    </tr>
+  <% }) %>
+</table>
+
+</body>
+</html>
