@@ -8,7 +8,14 @@ exports.findUserByUsername = (username, callback) => {
     callback(null, results[0]);
   });
 };
-
+exports.findUserByEmail = (email, callback) => {
+  const sql = 'SELECT * FROM users WHERE username = ?';
+  db.query(sql, [email], (err, results) => {
+    if (err) return callback(err);
+    if (results.length > 0) return callback(null, results[0]); // user exists
+    return callback(null, null); // user doesn't exist
+  });
+};
 exports.createUser = (userData, callback) => {
   const { name, email, contact, password, role } = userData;
   const sql = `INSERT INTO users (username, password, role) VALUES (?, ?, ?)`;
@@ -28,7 +35,7 @@ exports.createReceptionist = (data, callback) => {
   db.query(sql, [data.name, data.contact, data.userId, data.adminId], callback);
 };
 
-exports.getAllDoctors = (callback) => {
+exports.getAllDoctorss = (callback) => {
   const sql = `
     SELECT 
       d.doctor_id,
@@ -46,7 +53,7 @@ exports.getAllDoctors = (callback) => {
 };
 
 
-exports.deleteDoctor = (doctorId, callback) => {
+exports.deleteDoctordatabyid = (doctorId, callback) => {
   // Step 1: Find user_id linked to this doctor
   const getUserIdSql = 'SELECT user_id FROM doctor WHERE doctor_id = ?';
   
@@ -55,7 +62,7 @@ exports.deleteDoctor = (doctorId, callback) => {
     if (results.length === 0) return callback(new Error('Doctor not found'));
 
     const userId = results[0].user_id;
-
+    
     // Step 2: Delete doctor
     const deleteDoctorSql = 'DELETE FROM doctor WHERE doctor_id = ?';
     db.query(deleteDoctorSql, [doctorId], (err) => {
@@ -298,20 +305,17 @@ exports.deleteNurse = (id, callback) => {
   db.query('DELETE FROM nurse WHERE nurse_id = ?', [id], callback);
 };
 
-exports.addMedicine = (data, callback) => {
-  const sql = 'INSERT INTO medical (patient_id, medicine_name, price_medicine) VALUES (?, ?, ?)';
-  db.query(sql, [data.patient_id, data.medicine_name, data.price_medicine], callback);
-};
 
-exports.getAllMedicines = (callback) => {
-  const sql = 'SELECT * FROM medical';
-  db.query(sql, callback);
+exports.getAllMedicines = (pid,callback) => {
+  const sql = 'SELECT * FROM medical where patient_id=?';
+  db.query(sql,pid, callback);
 };
 
 
 // Get available rooms
-exports.getAvailableRooms = (callback) => {
-  db.query("SELECT room_no FROM room WHERE room_status = 'AVAILABLE'", callback);
+exports.getAvailableRoomsOnly = (callback) => {
+  const sql = `SELECT room_no FROM room WHERE room_status = 'AVAILABLE'`;
+  db.query(sql, callback);
 };
 
 // Get available nurses (not assigned currently)
@@ -355,4 +359,234 @@ exports.addPatientWithUpdates = (data, callback) => {
       });
     });
   });
+};
+
+exports.getAllPatientss = (callback) => {
+  const query = `
+    SELECT 
+      p.patient_id,
+      p.patient_name AS name,
+      p.patient_contact AS contact,
+      p.patient_issue AS issue,
+      p.admitted_date,
+      p.discharge_date,
+      p.status,
+      r.room_no AS room_No,
+      d.doctor_name AS doctor_name,
+      n.nurse_name AS nurse
+    FROM 
+      patient p
+    LEFT JOIN room r ON p.room_no = r.room_no
+    LEFT JOIN doctor d ON p.doctor_id = d.doctor_id
+    LEFT JOIN nurse n ON p.nurse_id = n.nurse_id
+  `;
+
+  db.query(query, (err, results) => {
+    if (err) return callback(err);
+    callback(null, results);
+  });
+};
+
+exports.getPatientById = (id, callback) => {
+  db.query('SELECT * FROM patient WHERE patient_id = ?', [id], callback);
+};
+
+exports.getAllDoctor = (callback) => {
+  db.query('SELECT doctor_id, doctor_name FROM doctor', callback);
+};
+
+exports.getAllNurse = (callback) => {
+  db.query('SELECT nurse_id, nurse_name FROM nurse', callback);
+};
+
+exports.getAvailableRooms = (patientId, callback) => {
+  const sql = `
+    SELECT room_no FROM room 
+    WHERE room_status = 'Available' 
+    OR room_no = (SELECT room_No FROM patient WHERE patient_id = ?)
+  `;
+  db.query(sql, [patientId], callback);
+};
+
+exports.updatePatient = (data, callback) => {
+  const sql = `
+    UPDATE patient SET
+      patient_name = ?,
+      patient_contact = ?,
+      patient_issue = ?,
+      room_no = ?,  -- ✅ fixed case
+      doctor_id = ?,
+      nurse_id = ?,
+      admitted_date = ?,
+      discharge_date = ?,  -- ✅ corrected field name
+      status = ?
+    WHERE patient_id = ?
+  `;
+
+  const values = [
+    data.name,
+    data.contact,
+    data.issue,
+    data.room_no,
+    data.doctor_id,
+    data.nurse_id,
+    data.admitted_date,
+    data.discharge_date,
+    data.status,
+    data.patient_id
+  ];
+
+  console.log("Update Patient Data:", values); // ✅ Debug
+  db.query(sql, values, callback);
+};
+
+exports.updateRoomStatus = (roomNo, status, callback) => {
+  const sql = `UPDATE room SET room_status = ? WHERE room_no = ?`;
+  db.query(sql, [status, roomNo], callback);
+};
+
+
+
+// ----------------------------------------------------------------------------
+
+exports.fetchChargesByPatientId = (id, callback) => {
+  const sql = `
+    SELECT p.*, r.charges_per_day, 
+           DATEDIFF(p.discharge_date, p.admitted_date) AS total_days,
+           (SELECT IFNULL(SUM(m.price_medicine), 0) 
+            FROM medical m 
+            WHERE m.patient_id = p.patient_id) AS medicine_charge
+    FROM patient p
+    LEFT JOIN room r ON p.room_no = r.room_no
+    WHERE p.patient_id = ?
+  `;
+
+  db.query(sql, [id], (err, results) => {
+    if (err) return callback(err);
+
+    if (results.length > 0) {
+      const data = results[0];
+
+      // Fallback if dates are invalid
+      const days = data.total_days > 0 ? data.total_days : 1;
+      const room_charge = data.charges_per_day ? data.charges_per_day * days : 0;
+
+      const patient = {
+        ...data,
+        total_days: days,
+        room_charge
+      };
+
+      callback(null, patient);
+    } else {
+      callback(null, {});
+    }
+  });
+};
+
+
+exports.insertBill = (bill, callback) => {
+  const sql = `
+    INSERT INTO bill (patient_id, room_charges, treatment_charges, nurse_charges, medicine_charges, total_amount, billing_date)
+    VALUES (?, ?, ?, ?, ?, ?, CURDATE())
+  `;
+  db.query(sql, [
+    bill.patient_id,
+    bill.room_charges,
+    bill.treatment_charges,
+    bill.nurse_charges,
+    bill.medicine_charges,
+    bill.total_amount
+  ], callback);
+};
+
+exports.getAllBills = (callback) => {
+  const sql = `
+    SELECT b.*, p.patient_name FROM bill b
+    JOIN patient p ON b.patient_id = p.patient_id
+  `;
+  db.query(sql, callback);
+};
+
+exports.getBillById = (billId, callback) => {
+  db.query('SELECT * FROM bill WHERE bill_id = ?', [billId], (err, results) => {
+    if (err || results.length === 0) return callback(err || new Error('Not found'));
+    callback(null, results[0]);
+  });
+};
+
+exports.deleteBillAndPatient = (billId, patientId, callback) => {
+  // 1. Delete bill
+  db.query('DELETE FROM bill WHERE bill_id = ?', [billId], (err, billResult) => {
+    if (err) return callback(err);
+
+    // 2. Delete treatment records (if table exists)
+    
+      // 3. Delete medicine records (if table exists)
+      db.query('DELETE FROM medicine WHERE patient_id = ?', [patientId], (err) => {
+        if (err) console.warn('No medicine table or error:', err.message); // optional
+
+        // 4. Get room number from patient before deleting
+        db.query('SELECT room_no FROM patient WHERE patient_id = ?', [patientId], (err, result) => {
+          if (err) return callback(err);
+          
+          const roomNo = result[0]?.room_no;
+
+          // 5. Delete patient
+          db.query('DELETE FROM patient WHERE patient_id = ?', [patientId], (err) => {
+            if (err) return callback(err);
+
+            // 6. Update room status to AVAILABLE
+            if (roomNo) {
+              db.query('UPDATE room SET room_status = "AVAILABLE" WHERE room_no = ?', [roomNo], (err) => {
+                if (err) return callback(err);
+                return callback(null); // Done
+              });
+            } else {
+              return callback(null); // No room update needed
+            }
+          });
+        });
+      });
+    
+  });
+};
+
+
+exports.getBillDetails = (billId, callback) => {
+  const sql = `SELECT b.*, p.patient_name as patient_name FROM bill b
+               JOIN patient p ON b.patient_id = p.patient_id
+               WHERE b.bill_id = ?`;
+  db.query(sql, [billId], (err, result) => {
+    if (err || result.length === 0) return callback(err || new Error("Bill not found"));
+    callback(null, result[0]);
+  });
+};
+
+exports.getAllPatients = (callback) => {
+  const sql = `
+    SELECT p.patient_id AS id, p.patient_name AS name, p.patient_age AS age,
+           p.patient_contact AS contact, p.patient_issue AS issue,
+           p.patient_gender AS gender, p.room_no AS room,
+           n.nurse_name AS nurse, p.admitted_date AS admitted,
+           p.status
+    FROM patient p
+    LEFT JOIN nurse n ON p.nurse_id = n.nurse_id
+  `;
+  db.query(sql, callback);
+};
+
+exports.saveMedicine = (data, callback) => {
+  const sql = 'INSERT INTO medical (patient_id, medicine_name, price_medicine) VALUES (?, ?, ?)';
+  db.query(sql, [data.patient_id, data.medicine_name, data.price_medicine], callback);
+};
+
+exports.getPatientIdByMedicineId = (medicalId, callback) => {
+  const sql = "SELECT patient_id FROM medical WHERE medical_id = ?";
+  db.query(sql, [medicalId], callback);
+};
+
+exports.deleteMedicineById = (medicalId, callback) => {
+  const sql = "DELETE FROM medical WHERE medical_id = ?";
+  db.query(sql, [medicalId], callback);
 };

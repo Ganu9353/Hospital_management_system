@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Billing List</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet" />
+  <link rel="stylesheet" href="/css/style.css" />
+  <style>
+    body {
+      padding-top: 105px;
+      background: linear-gradient(120deg, #a1c4fd, #c2e9fb);
+    }
+
+    .main-content {
+      margin-left: 280px;
+      margin-top: 0;
+    }
+
+    .table-card {
+      background-color: #fff;
+      border-radius: 15px;
+      padding: 30px;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    h2 {
+      font-weight: bold;
+      color: #0d6efd;
+    }
+
+    .table th {
+      background-color: #0d6efd;
+      color: white;
+    }
+
+    .btn-success {
+      font-size: 0.85rem;
+    }
+  </style>
+</head>
+<body>
+  <%- include('header1') %>
+  <%- include('Receptionsidebar') %>
+
+  <div class="main-content p-4">
+    <h2 class="mb-4"><i class="bi bi-receipt me-2"></i>Billing Records</h2>
+
+    <div class="table-card">
+      <table class="table table-bordered table-hover align-middle text-center">
+        <thead>
+          <tr>
+            <th>Patient Name</th>
+            <th>Room</th>
+            <th>Treatment</th>
+            <th>Nurse</th>
+            <th>Medicine</th>
+            <th>Total</th>
+            <th>Billing Date</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% bills.forEach(bill => { %>
+            <tr>
+              <td><%= bill.patient_name %></td>
+              <td><%= bill.room_charges %></td>
+              <td><%= bill.treatment_charges %></td>
+              <td><%= bill.nurse_charges %></td>
+              <td><%= bill.medicine_charges %></td>
+              <td><strong>₹<%= bill.total_amount %></strong></td>
+              <td><%= bill.billing_date.toISOString().split('T')[0] %></td>
+              <td>
+                <a href="/billing/pay?id=<%= bill.bill_id %>" class="btn btn-success btn-sm">
+                  <i class="bi bi-currency-rupee"></i> Pay
+                </a>
+                <a href="/billing/download?id=<%= bill.bill_id %>" class="btn btn-primary btn-sm" target="_blank">
+                   <i class="bi bi-download"></i> Download
+                </a>
+              </td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

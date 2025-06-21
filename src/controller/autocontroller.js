@@ -1,5 +1,6 @@
 // Updated authController.js
 const bcrypt = require("bcrypt");
+const pdf = require('html-pdf');
 const userModel = require("../models/userModel");
 const db = require('../config/db');
 const { render } = require("ejs");
@@ -48,7 +49,7 @@ exports.login = (req, res) => {
     if (user.role === 'ADMIN') {
       res.redirect('/Admindashboard');
     } else if (user.role === 'DOCTOR') {
-      res.redirect('/doctordashboard');
+      res.redirect('/Docterdashboard');
     } else if (user.role === 'RECEPTIONIST') {
       res.redirect('/receptiondashboard');
     } else {
@@ -71,26 +72,32 @@ exports.registerUser = (req, res) => {
   const { name, email, contact, password, role, specialization, experience } = req.body;
   const adminId = req.session.user.id;
 
-  userModel.createUser({ name, email, contact, password, role }, (err, userId) => {
-    if (err) {
-      console.error(err);
-      return res.status(500).send('Error creating user.');
-    }
+  // Check if username/email already exists
+  userModel.findUserByEmail(email, (err, existingUser) => {
+    if (err) return res.status(500).send('Error checking existing user.');
+    if (existingUser) return res.status(400).send('Username (email) already exists.');
 
-    if (role === 'doctor') {
-      
-      userModel.createDoctor({ name, contact, specialization, experience, userId, adminId }, (err) => {
-        if (err) return res.status(500).send('Error creating doctor.');
-        res.redirect('/Admindashboard');
-      });
-    } else if (role === 'receptionist') {
-      userModel.createReceptionist({ name, contact, userId, adminId }, (err) => {
-        if (err) return res.status(500).send('Error creating receptionist.');
-        res.redirect('/Admindashboard');
-      });
-    } else {
-      res.status(400).send('Invalid role.');
-    }
+    // Proceed to create new user
+    userModel.createUser({ name, email, contact, password, role }, (err, userId) => {
+      if (err) {
+        console.error(err);
+        return res.status(500).send('Error creating user.');
+      }
+
+      if (role === 'doctor') {
+        userModel.createDoctor({ name, contact, specialization, experience, userId, adminId }, (err) => {
+          if (err) return res.status(500).send('Error creating doctor.');
+          res.redirect('/Admindashboard');
+        });
+      } else if (role === 'receptionist') {
+        userModel.createReceptionist({ name, contact, userId, adminId }, (err) => {
+          if (err) return res.status(500).send('Error creating receptionist.');
+          res.redirect('/Admindashboard');
+        });
+      } else {
+        res.status(400).send('Invalid role.');
+      }
+    });
   });
 };
 
@@ -172,7 +179,7 @@ exports.updateReception = (req, res) => {
 };
 
 exports.viewDoctors = (req, res) => {
-  userModel.getAllDoctors((err, doctors) => {
+  userModel.getAllDoctorss((err, doctors) => {
     if (err) return res.status(500).send('Server Error');
     res.render('viewdoctor', { doctors });
   });
@@ -195,7 +202,8 @@ exports.updateDoctor = (req, res) => {
 
 exports.deleteDoctor = (req, res) => {
   const id = req.query.id;
-  userModel.deleteDoctor(id, (err) => {
+  userModel.deleteDoctordatabyid(id, (err) => {
+    console.log(err);
     if (err) return res.status(500).send("Error deleting doctor");
     res.redirect('/viewDoctor');
   });
@@ -334,24 +342,12 @@ exports.showAddForm = (req, res) => {
   res.render('addMedicine');
 };
 
-exports.saveMedicine = (req, res) => {
-  const { patient_id, medicine_name, price_medicine } = req.body;
-  userModel.addMedicine({ patient_id, medicine_name, price_medicine }, (err) => {
-    if (err) throw err;
-    res.redirect('/medicine/view');
-  });
-};
 
-exports.viewMedicine = (req, res) => {
-  userModel.getAllMedicines((err, results) => {
-    if (err) throw err;
-    res.render('viewMedicine', { medicines: results });
-  });
-};
+
 
 
 exports.getAddPatientForm = (req, res) => {
-  userModel.getAvailableRooms((err, rooms) => {
+  userModel.getAvailableRoomsOnly((err, rooms) => {
     if (err) return res.status(500).send('Error loading rooms');
 
     userModel.getAvailableNurses((err, nurses) => {
@@ -384,5 +380,210 @@ exports.savePatient = (req, res) => {
       return res.status(500).send("Failed to add patient.");
     }
     res.redirect('/patient/add');
+  });
+};
+
+
+exports.viewPatients = (req, res) => {
+  userModel.getAllPatientss((err, patients) => {
+    if (err) {
+      console.error('Error fetching patients:', err);
+      return res.status(500).send('Error loading patients');
+    }
+     
+    res.render('viewPatient', { patients: patients });  // your EJS file
+  });
+};
+
+exports.editPatientForm = (req, res) => {
+  const patientId = req.query.id;
+
+  userModel.getPatientById(patientId, (err, patientResults) => {
+    if (err || patientResults.length === 0) return res.status(500).send("Patient not found.");
+    
+    const patient = patientResults[0];
+
+    userModel.getAllDoctor((err, doctorResults) => {
+      if (err) return res.status(500).send("Doctor fetch error");
+
+      userModel.getAllNurse((err, nurseResults) => {
+        if (err) return res.status(500).send("Nurse fetch error");
+
+        userModel.getAvailableRooms(patientId, (err, roomResults) => {
+          if (err) return res.status(500).send("Room fetch error");
+
+          res.render('editPatient', {
+            patient,
+            doctors: doctorResults,
+            nurses: nurseResults,
+            rooms: roomResults
+          });
+        });
+      });
+    });
+  });
+};
+
+exports.updatePatient = (req, res) => {
+  const data = req.body;
+  const patientId = data.patient_id;
+
+  // Step 1: Get previous room number
+  userModel.getPatientById(patientId, (err, result) => {
+    if (err) return res.status(500).send("Error fetching old room");
+    const oldRoomNo = result[0].room_no;
+    const newRoomNo = data.room_no;
+
+    // Step 2: Update patient details
+    userModel.updatePatient(data, (err) => {
+      if (err) return res.status(500).send("Update failed");
+
+      // Step 3: Update room status only if changed
+      if (oldRoomNo != newRoomNo) {
+        // Make old room available
+        userModel.updateRoomStatus(oldRoomNo, 'AVAILABLE', (err1) => {
+          if (err1) console.error("Old room status update failed");
+
+          // Make new room occupied
+          userModel.updateRoomStatus(newRoomNo, 'OCCUPIED', (err2) => {
+            if (err2) console.error("New room status update failed");
+
+            res.redirect('/viewPatients');
+          });
+        });
+      } else {
+        res.redirect('/viewPatients');
+      }
+    });
+  });
+};
+
+// --------------------------------------------------------------------------------
+
+exports.generateBillForm = (req, res) => {
+  const patientId = req.query.id;
+  userModel.fetchChargesByPatientId(patientId, (err, patient) => {
+    console.log(err);
+    if (err) return res.status(500).send('Error fetching patient data');
+    res.render('generateBill', { patient });
+  });
+};
+
+exports.generateBill = (req, res) => {
+  const billData = req.body;
+  userModel.insertBill(billData, (err, result) => {
+    if (err) return res.status(500).send('Failed to generate bill');
+    res.redirect('/billing/list');
+  });
+};
+
+exports.viewBills = (req, res) => {
+  userModel.getAllBills((err, bills) => {
+    if (err) return res.status(500).send('Error fetching bills');
+    res.render('viewBills', { bills });
+  });
+};
+
+exports.payBill = (req, res) => {
+  const billId = req.query.id;
+
+  // Get patient ID from bill
+  const sql = 'SELECT patient_id FROM bill WHERE bill_id = ?';
+  db.query(sql, [billId], (err, result) => {
+    if (err || result.length === 0) return res.status(404).send('Bill not found');
+
+    const patientId = result[0].patient_id;
+
+    userModel.deleteBillAndPatient(billId, patientId, (err) => {
+      if (err) return res.status(500).send('Error during payment and cleanup');
+      res.redirect('/billing/list');
+    });
+  });
+};
+
+exports.downloadBill = (req, res) => {
+  const billId = req.query.id;
+
+  userModel.getBillDetails(billId, (err, bill) => {
+    if (err || !bill) return res.status(404).send('Bill not found');
+
+    // Render the EJS bill template as HTML string
+    res.render('billTemplate', { bill }, (err, html) => {
+      if (err) {
+        console.error("EJS render error:", err);
+        return res.status(500).send('Error rendering bill');
+      }
+
+      // ✅ Generate PDF from HTML using html-pdf
+      pdf.create(html).toStream((err, stream) => {
+        if (err) {
+          console.error("PDF creation error:", err);
+          return res.status(500).send('PDF generation failed');
+        }
+
+        // ✅ Set headers and stream PDF to browser
+        res.setHeader('Content-Type', 'application/pdf');
+        res.setHeader('Content-Disposition', 'attachment; filename=bill.pdf');
+        stream.pipe(res);
+      });
+    });
+  });
+};
+
+// -----------------------------
+exports.viewAllPatients = (req, res) => {
+  userModel.getAllPatients((err, patients) => {
+    console.log(patients);
+    if (err) return res.status(500).send("Error fetching patients");
+    res.render('doctorPatients', { patients });
+  });
+};
+
+exports.addMedicineForm = (req, res) => {
+  const patientId = req.params.id;
+  res.render('addMedicine', { patientId });
+};
+
+exports.saveMedicine = (req, res) => {
+  const data = req.body;
+  userModel.saveMedicine(data, (err) => {
+    if (err) return res.status(500).send("Error saving medicine");
+    res.redirect('/medicine/list/' + data.patient_id);  // Redirect to list page for that patient
+  });
+};
+
+// Delete Medicine
+exports.deleteMedicine = (req, res) => {
+  const id = req.params.id;
+
+  userModel.getPatientIdByMedicineId(id, (err, result) => {
+    if (err) {
+      console.error("Error fetching patient_id:", err);
+      return res.status(500).send("Error getting patient ID");
+    }
+
+    if (result.length === 0) {
+      return res.status(404).send("Medicine not found");
+    }
+
+    const patientId = result[0].patient_id;
+
+    userModel.deleteMedicineById(id, (err2) => {
+      if (err2) {
+        console.error("Error deleting medicine:", err2);
+        return res.status(500).send("Error deleting medicine");
+      }
+
+      res.redirect('/medicine/list/' + patientId);
+    });
+  });
+};
+
+// View Medicines for a patient
+exports.viewMedicine = (req, res) => {
+  const pid = req.params.id;
+  userModel.getAllMedicines(pid, (err, results) => {
+    if (err) return res.status(500).send("Error fetching medicines");
+    res.render('viewMedicine', { medicines: results });
   });
 };

@@ -34,7 +34,7 @@ router.post('/updateReception', isAuthenticated, isAdmin, authController.updateR
 router.get('/addReceptionist', isAuthenticated, isAdmin, authController.AddReceptionist);
 
 // Doctor-only dashboard
-router.get('/Docterdashboard', isAuthenticated, isDoctor, authController.getDocterdashboard);
+router.get('/Docterdashboard',  isDoctor, authController.getDocterdashboard);
 
 // Receptionist-only dashboard
 router.get('/Receptiondashboard', isAuthenticated, isReceptionist, authController.getReceptiondashboard);
@@ -47,21 +47,36 @@ router.get('/room/list',isAuthenticated,isReceptionist, authController.showRooml
 router.get('/nurse/add',isAuthenticated,isReceptionist, authController.getAddNursePage);
 router.post('/save-nurse',isAuthenticated,isReceptionist, authController.saveNurse);
 router.get('/nurse/list',isAuthenticated,isReceptionist, authController.viewNurses);
-router.get('/medicine/add',isAuthenticated,isReceptionist, authController.showAddForm);
-router.post('/medicine/add', authController.saveMedicine);
-router.get('/medicine/list', authController.viewMedicine);
+
+
 
 router.get('/rooms/edit',isAuthenticated,isReceptionist, authController.editRoomForm);
 router.post('/room/update',isAuthenticated,isReceptionist, authController.updateRoom);
 router.get('/rooms/delete',isAuthenticated,isReceptionist, authController.deleteRoom);
 
-router.get('/nurses/edit', authController.editNurseForm);
-router.post('/nurse/update', authController.updateNurse);
+router.get('/nurses/edit', isAuthenticated,isReceptionist,authController.editNurseForm);
+router.post('/nurse/update',isAuthenticated,isReceptionist, authController.updateNurse);
 router.get('/nurses/delete', authController.deleteNurse);
 
-router.get('/patient/add', authController.getAddPatientForm);
-router.post('/patient/add', authController.savePatient);
+router.get('/patient/add',isAuthenticated,isReceptionist, authController.getAddPatientForm);
+router.post('/patient/add',isAuthenticated,isReceptionist, authController.savePatient);
+router.get('/viewPatients',isAuthenticated,isReceptionist, authController.viewPatients);
+router.get('/editPatient', isAuthenticated,isReceptionist,authController.editPatientForm);
+router.post('/updatePatient', isAuthenticated,isReceptionist,authController.updatePatient);
 
 
 
+router.get('/generatebill', isAuthenticated,isReceptionist,authController.generateBillForm);
+router.post('/billing/generate',isAuthenticated,isReceptionist, authController.generateBill);
+router.get('/billing/list',isAuthenticated,isReceptionist, authController.viewBills);
+router.get('/billing/pay',isAuthenticated,isReceptionist, authController.payBill);
+router.get('/billing/download',isAuthenticated,isReceptionist, authController.downloadBill);
+
+
+
+router.get('/getAllpatients',isAuthenticated,isDoctor, authController.viewAllPatients);
+router.get('/doctor/add-medicine/:id',isAuthenticated,isDoctor, authController.addMedicineForm);
+router.post('/doctor/add-medicine',isAuthenticated,isDoctor, authController.saveMedicine);
+router.get('/medicine/list/:id',isAuthenticated,isDoctor, authController.viewMedicine);
+router.post('/delete-medicine/:id', isAuthenticated,isDoctor,authController.deleteMedicine);
 module.exports = router;

@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Bill</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 40px; }
+    h1 { color: #0d6efd; }
+    table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+    td, th { padding: 8px; border: 1px solid #ccc; text-align: left; }
+  </style>
+</head>
+<body>
+  <h1>Patient Bill</h1>
+  <p><strong>Patient:</strong> <%= bill.patient_name %></p>
+  <p><strong>Billing Date:</strong> <%= bill.billing_date.toISOString().split('T')[0] %></p>
+
+  <table>
+    <tr><th>Room Charges</th><td>₹<%= bill.room_charges %></td></tr>
+    <tr><th>Treatment Charges</th><td>₹<%= bill.treatment_charges %></td></tr>
+    <tr><th>Nurse Charges</th><td>₹<%= bill.nurse_charges %></td></tr>
+    <tr><th>Medicine Charges</th><td>₹<%= bill.medicine_charges %></td></tr>
+    <tr><th><strong>Total</strong></th><td><strong>₹<%= bill.total_amount %></strong></td></tr>
+  </table>
+</body>
+</html>

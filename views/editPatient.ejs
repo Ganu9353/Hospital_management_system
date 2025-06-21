@@ -1,32 +1,179 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+  <meta charset="UTF-8" />
+  <title>Edit Patient</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <!-- Bootstrap & Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet" />
+
+  <style>
+    body {
+      margin: 0;
+      padding-top: 105px;
+      background: linear-gradient(120deg, #a1c4fd, #c2e9fb);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .wrapper {
+      display: flex;
+    }
+
+    .sidebar {
+      width: 260px;
+      position: fixed;
+      top: 80px;
+      bottom: 0;
+      left: 0;
+      background: #ffffff;
+      border-right: 1px solid #ccc;
+      z-index: 1000;
+    }
+
+    .main-content {
+      margin-left: 260px;
+      padding: 30px;
+      width: calc(100% - 260px);
+    }
+
+    .card {
+      border-radius: 15px;
+      border: none;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.05);
+      padding: 30px;
+      background-color: #fff;
+    }
+
+    h2 {
+      font-weight: bold;
+      color: #0d6efd;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .form-label {
+      font-weight: 500;
+    }
+
+    .btn-primary {
+      border-radius: 8px;
+      padding: 10px 25px;
+    }
+
+    .header-fixed {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 80px;
+      z-index: 1050;
+    }
+  </style>
 </head>
 <body>
-   <form method="POST" action="/patients/edit/<%= patient.patient_id %>">
-  <input type="text" name="patient_name" value="<%= patient.patient_name %>" />
-  <input type="number" name="patient_age" value="<%= patient.patient_age %>" />
-  <select name="doctor_id">
-    <% doctors.forEach(d => { %>
-      <option value="<%= d.doctor_id %>" <%= d.doctor_id == patient.doctor_id ? 'selected' : '' %>><%= d.doctor_name %></option>
-    <% }) %>
-  </select>
-  <select name="room_no">
-    <% rooms.forEach(r => { %>
-      <option value="<%= r.room_no %>" <%= r.room_no == patient.room_no ? 'selected' : '' %>><%= r.room_type %> - <%= r.room_no %></option>
-    <% }) %>
-  </select>
-  <select name="nurse_id">
-    <% nurses.forEach(n => { %>
-      <option value="<%= n.nurse_id %>" <%= n.nurse_id == patient.nurse_id ? 'selected' : '' %>><%= n.nurse_name %></option>
-    <% }) %>
-  </select>
-  <button type="submit">Update</button>
-</form>
 
+  <!-- Header -->
+  <div class="header-fixed">
+    <%- include('header1') %>
+  </div>
 
+  <!-- Layout Container -->
+  <div class="wrapper">
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+      <%- include('Receptionsidebar') %>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+      <div class="container">
+        <div class="card">
+          <h2>Edit Patient Details</h2>
+          <form action="/updatePatient" method="POST">
+            <input type="hidden" name="patient_id" value="<%= patient.patient_id %>">
+
+            <div class="mb-3">
+              <label class="form-label">Name</label>
+              <input type="text" name="name" value="<%= patient.name %>" class="form-control" required>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Contact</label>
+              <input type="text" name="contact" value="<%= patient.contact %>" class="form-control" required>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Issue</label>
+              <input type="text" name="issue" value="<%= patient.issue %>" class="form-control" required>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Room</label>
+              <select name="room_no" class="form-select" required>
+                <% rooms.forEach(room => { %>
+                  <option value="<%= room.room_no %>" <%= room.room_no === patient.room_no ? 'selected' : '' %>>
+                    <%= room.room_no %>
+                  </option>
+                <% }) %>
+              </select>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Doctor</label>
+              <select name="doctor_id" class="form-select" required>
+                <% doctors.forEach(doc => { %>
+                  <option value="<%= doc.doctor_id %>" <%= doc.doctor_id === patient.doctor_id ? 'selected' : '' %>>
+                    <%= doc.doctor_name || doc.name %>
+                  </option>
+                <% }) %>
+              </select>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Nurse</label>
+              <select name="nurse_id" class="form-select" required>
+                <% nurses.forEach(nurse => { %>
+                  <option value="<%= nurse.nurse_id %>" <%= nurse.nurse_id === patient.nurse_id ? 'selected' : '' %>>
+                    <%= nurse.nurse_name || nurse.name %>
+                  </option>
+                <% }) %>
+              </select>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Admitted Date</label>
+              <input type="date" name="admitted_date" class="form-control"
+                     value="<%= patient.admitted_date ? patient.admitted_date.toISOString().split('T')[0] : '' %>">
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Discharged Date</label>
+              <input type="date" name="discharged_date" class="form-control"
+                     value="<%= patient.discharged_date ? patient.discharged_date.toISOString().split('T')[0] : '' %>">
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Status</label>
+              <select name="status" class="form-select">
+                <option value="Active" <%= patient.status === 'Active' ? 'selected' : '' %>>Admitted</option>
+                <option value="Discharged" <%= patient.status === 'Discharged' ? 'selected' : '' %>>Discharged</option>
+              </select>
+            </div>
+
+            <div class="text-center">
+              <button type="submit" class="btn btn-primary mt-3">Update Patient</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
